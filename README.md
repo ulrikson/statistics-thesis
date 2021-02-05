@@ -1,3 +1,6 @@
+https://kinsta.com/knowledgebase/what-is-github/  
+https://product.hubspot.com/blog/git-and-github-tutorial-for-beginners 
+
 # How To
 1. cmd(ctrl)-shift-p och skriv 'Git: Clone'
 2. Kopiera repository URL (https://github.com/ulrikson/statistics-thesis): tryck på "Code" (grön knapp) och kopiera länken under HTTPS
