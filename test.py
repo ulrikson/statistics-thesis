@@ -1,22 +1,25 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
+import math
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_squared_error
 
-df = pd.read_csv('clean_sm_day.csv')
-df = df.drop(['Unnamed: 0'], axis=1)
+np.random.seed(7)
 
-# choosing close column
-close_diff = np.diff(df['Close'])
-close_diff = np.insert(close_diff, 0, 0, axis=0) # inserting 0 as first diff
-df['diff'] = close_diff # appending to dataframe
+# load dataset
+dataframe = pd.read_csv('clean_sm_day.csv', usecols=['Close'])
+dataset = dataframe.values
+dataset = dataset.astype('float32')
 
-# normalizing data
-scaler = MinMaxScaler()
-df_norm = pd.DataFrame(scaler.fit_transform(df), columns=df.columns, index=df.index) # potential problem --> we're fitting with test data?
+# normalize the dataset
+scaler = MinMaxScaler(feature_range=(0, 1))
+dataset = scaler.fit_transform(dataset)
 
-# splitting into train and test
-train_size = round(len(df_norm) * 0.9)
-test_size = len(df_norm) - train_size
-train_data = df_norm.head(train_size)
-test_data = df_norm.tail(test_size)
-
+# split into train and test sets
+train_size = int(len(dataset) * 0.8)
+test_size = len(dataset) - train_size
+train =dataset[0:train_size,:]
+test = dataset[train_size:len(dataset),:]
