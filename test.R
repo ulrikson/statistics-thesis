@@ -1,39 +1,72 @@
 library(forecast)
 library(rugarch)
+library(readxl)
+library(aTSA)
 
 
-# Exploring data --------------------------------------------------------------------------------
+# Loading data --------------------------------------------------------------------------------
 
-#* Reading data set (this is per day, and just for testing)
-btc <- read.csv('BTCUSD_Day.csv')
-tail(btc)
-ts.plot(btc$Close, xlab = "Day", ylab = "Closing price")
+small <- read_excel('Small_cap_day.xlsx', col_names = FALSE)
+small = small[-(1:17),-(6:11)] #  removing unnecessary rows and columns
+colnames(small) <- small[1, ] #  setting first row as column names
+small = small[-1, ] #  removing duplicate of header
+small = small[order(small$`Exchange Date`), ] #  sorting by date ASC
+small = as.data.frame(small) #  converting to dataframe
+small[, (1:5)] <- apply(small[, (1:5)], 2,
+                        function(x)
+                          as.numeric(as.character(x))) #  converting columns to numeric
+head(small)
 
-#* nominator returns lagged difference, denominator removes last element
-returns = diff(btc$Close) / btc$Close[-length(btc$Close)]
+# Choosing close column and plotting
+close = small$Close
+ts.plot(close, xlab = "Day", ylab = "Closing price")
+
+# Converting to returns
+returns = diff(close)
 head(returns)
+
 ts.plot(returns,
         xlab = "Day",
         ylab = "Returns (closing price)",
-        main = "BTC returns (daily)")
-abline(a=0,0, col="red")
+        main = "ln returns")
+abline(a = 0, 0, col = "red")
 
-#* Splitting into train and test
+# Splitting into train (90%) and test (10%)
+train_size = round(length(returns) * 0.9)
 
-train = ts(returns[1:387], start=c(2019,365), frequency = 365)
-test = ts(returns[388:397], start=c(2021,22), frequency = 365)
+train = returns[1:train_size]
+test = returns[(train_size+1):length(returns)]
+tail(train)
+head(test)
 
-# Trying an ARIMA (for fun) -----------------------------------------------------------------------------
+# ARIMA -----------------------------------------------------------------------------
 
-arima_returns = auto.arima(train, ic = "bic", seasonal = FALSE)
-summary(arima_returns)
+auto_arima = auto.arima(train, ic = "bic", seasonal = FALSE)
+arimaorder(auto_arima)
+arima = arima(train, c(1,0,1)) #  inserting into model (needed for arch.test)
+
+plot(arima$residuals, type="p", cex=0.5) #  ser inte så heteroskedastiskt ut?
+arch.test(arima, output = TRUE) #  H0 förkastas -> heteroskedasticitet?
 
 
-# Trying GARCH --------------------------------------------------------------------------------
+# GARCH --------------------------------------------------------------------------------
 
-#* simple 1.1
-spec.1 = ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1, 1)))
-fit.1 = ugarchfit(spec = spec.1, data = train)
-#print(fit.1)
-infocriteria(fit.1)
+#* ARCH(1,1) from auto_arima (1,1)
+arch = ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1, 1))) #  simplest GARCH, a lot available
+arch_fit = ugarchfit(spec = arch, data = train)
+show(arch_fit)
+infocriteria(arch_fit)
+plot(arch_fit)
+
+# Forecasting
+forecast = ugarchforecast(arch_fit, n.ahead = 5);
+
+# ALTERNATIVE WITH ROLLING FORECAST
+#spec = getspec(arch_fit);
+#setfixed(spec) <- as.list(coef(arch_fit));
+#forecast = ugarchforecast(spec, n.ahead = 1, n.roll = 10, data = test, out.sample = 10);
+
+sigma(forecast);
+fitted(forecast)
+
 
