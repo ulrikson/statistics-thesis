@@ -45,7 +45,7 @@ auto_arima = auto.arima(train, ic = "bic", seasonal = FALSE)
 arimaorder(auto_arima)
 arima = arima(train, c(1,0,1)) #  inserting into model (needed for arch.test)
 
-plot(arima$residuals, type="p", cex=0.5) #  ser inte så heteroskedastiskt ut?
+plot(arima$residuals, type="p", cex=0.5)
 arch.test(arima, output = TRUE) #  H0 förkastas -> heteroskedasticitet?
 
 
