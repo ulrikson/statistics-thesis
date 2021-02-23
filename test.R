@@ -28,7 +28,7 @@ head(returns)
 ts.plot(returns,
         xlab = "Day",
         ylab = "Returns (closing price)",
-        main = "ln returns")
+        main = "Returns")
 abline(a = 0, 0, col = "red")
 
 # Splitting into train (90%) and test (10%)
@@ -44,6 +44,10 @@ head(test)
 auto_arima = auto.arima(train, ic = "bic", seasonal = FALSE)
 arimaorder(auto_arima)
 arima = arima(train, c(1,0,1)) #  inserting into model (needed for arch.test)
+arima_forecast = predict(arima, n.ahead=5)
+
+rmse_arima = sqrt(mean((test[1:5] - arima_forecast$pred)^2))
+rmse_arima
 
 plot(arima$residuals, type="p", cex=0.5)
 arch.test(arima, output = TRUE) #  H0 förkastas -> heteroskedasticitet?
@@ -60,6 +64,9 @@ plot(arch_fit)
 
 # Forecasting
 forecast = ugarchforecast(arch_fit, n.ahead = 5);
+rmse_arch = sqrt(mean((test[1:5] - forecast@forecast$seriesFor)^2))
+rmse_arch
+
 
 # ALTERNATIVE WITH ROLLING FORECAST
 #spec = getspec(arch_fit);

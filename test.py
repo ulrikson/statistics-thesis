@@ -56,6 +56,7 @@ forecast_normalized = model.predict(testX)
 
 # inverting the normalization => original scale
 forecast = scaler.inverse_transform(forecast)
+testY = scaler.inverse_transform([testY])
 
 print(forecast)
 
