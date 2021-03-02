@@ -11,7 +11,7 @@ from sklearn.metrics import mean_squared_error
 
 np.random.seed(7)
 
-# load dataset
+# load dat
 dataframe = pd.read_csv('clean_sm_day.csv', usecols=['Close'])
 dataset = dataframe.values
 dataset = dataset.astype('float32')
