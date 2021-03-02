@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error
 np.random.seed(7)
 
 # load dat
-dataframe = pd.read_csv('clean_sm_day.csv', usecols=['Close'])
+dataframe = pd.read_csv('data/final.csv', usecols=['logreturns'])
 dataset = dataframe.values
 dataset = dataset.astype('float32')
 

@@ -13,10 +13,10 @@ ts.plot(logreturns, xlab = "Day", ylab = "Closing price")
 abline(a = 0, 0, col = "red")
 
 # Splitting into train (90%) and test (10%)
-train_size = round(length(returns) * 0.9)
+train_size = round(length(logreturns) * 0.9)
 
-train = returns[1:train_size]
-test = returns[(train_size+1):length(returns)]
+train = logreturns[1:train_size]
+test = logreturns[(train_size+1):length(logreturns)]
 tail(train)
 head(test)
 
@@ -57,4 +57,20 @@ rmse_arch
 sigma(forecast);
 fitted(forecast)
 
+ts.plot(test[1:50])
+lines(fitted(forecast), col="red")
 
+
+# Function for comparing ARCH -----------------------------------------------------------------
+archInfoCriteria <- function(p, q) {
+  arch = ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(p, q)))
+  arch_fit = ugarchfit(spec = arch, data = train)
+  return(infocriteria(arch_fit))
+}
+
+archInfoCriteria(1,1)
+# very small differences to these other models (< 0.01%)
+archInfoCriteria(2,1)
+archInfoCriteria(1,2)
+archInfoCriteria(2,2)
+archInfoCriteria(7,7)
