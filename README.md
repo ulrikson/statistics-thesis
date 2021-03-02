@@ -1,12 +1,6 @@
 https://kinsta.com/knowledgebase/what-is-github/  
 https://product.hubspot.com/blog/git-and-github-tutorial-for-beginners 
 
-# Varför GitHub?
-- Enkelt att dela kod med varandra. GitHub ser automatiskt till att jag har din senaste kod och du min, utan att vi behöver skicka kod mellan varandra
-- Om man gör massa ändringar, sparar och sen vill gå tillbaka (tänk typ du ändrar något, gör 100 saker till och sen ångrar dig), då (om du pushat till github) kan du gå tillbaka och se hur koden såg ut innan (man kan inte gå tillbaka hur långt som helst i VS Code)
-- Bra att kunna, nästan alla organisationer använder det
-- Du kan enkelt dela din kod med t.ex. en rekryterare + det uppfattas som mer seriöst eftersom GitHub är branschstandard för nästan allt kodrelaterat
-
 # How To
 1. cmd(ctrl)-shift-p och skriv 'Git: Clone'
 2. Kopiera repository URL (https://github.com/ulrikson/statistics-thesis): tryck på "Code" (grön knapp) och kopiera länken under HTTPS
