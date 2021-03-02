@@ -17,6 +17,8 @@ small[, (1:5)] <- apply(small[, (1:5)], 2,
                           as.numeric(as.character(x))) #  converting columns to numeric
 head(small)
 
+write.csv(small, 'data/clean_data.csv', row.names = FALSE)
+
 # Choosing close column and plotting
 close = small$Close
 ts.plot(close, xlab = "Day", ylab = "Closing price")
