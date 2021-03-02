@@ -47,13 +47,13 @@ model = Sequential()
 model.add(LSTM(4, input_shape=(1, look_back))) #* what does 4 and input_shape do?
 model.add(Dense(1)) #* what does Dense do?
 model.compile(loss='mean_squared_error', optimizer='adam') #* adam?
-model.fit(trainX, trainY, epochs=10, batch_size=1, verbose=2) #* epochs? verbose?
+model.fit(trainX, trainY, epochs=1, batch_size=1, verbose=2) #* epochs? verbose?
 
 # make predictions
 forecast_normalized = model.predict(testX)
 
 # inverting the normalization => original scale
-forecast = scaler.inverse_transform(forecast)
+forecast = scaler.inverse_transform(forecast_normalized)
 testY = scaler.inverse_transform([testY])
 
 print(forecast)
