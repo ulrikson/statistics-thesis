@@ -7,8 +7,6 @@ from keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 
-#! see lstm.ipynb for updated
-
 np.random.seed(7)
 
 # load dat

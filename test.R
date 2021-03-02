@@ -5,32 +5,11 @@ library(aTSA)
 
 
 # Loading data --------------------------------------------------------------------------------
-
-small <- read_excel('Small_cap_day.xlsx', col_names = FALSE)
-small = small[-(1:17),-(6:11)] #  removing unnecessary rows and columns
-colnames(small) <- small[1, ] #  setting first row as column names
-small = small[-1, ] #  removing duplicate of header
-small = small[order(small$`Exchange Date`), ] #  sorting by date ASC
-small = as.data.frame(small) #  converting to dataframe
-small[, (1:5)] <- apply(small[, (1:5)], 2,
-                        function(x)
-                          as.numeric(as.character(x))) #  converting columns to numeric
-head(small)
-
-write.csv(small, 'data/clean_data.csv', row.names = FALSE)
+data = read.csv('data/final.csv', header = TRUE)
 
 # Choosing close column and plotting
-close = small$Close
-ts.plot(close, xlab = "Day", ylab = "Closing price")
-
-# Converting to returns
-returns = diff(close)
-head(returns)
-
-ts.plot(returns,
-        xlab = "Day",
-        ylab = "Returns (closing price)",
-        main = "Returns")
+logreturns = data$logreturns
+ts.plot(logreturns, xlab = "Day", ylab = "Closing price")
 abline(a = 0, 0, col = "red")
 
 # Splitting into train (90%) and test (10%)
