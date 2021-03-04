@@ -28,22 +28,36 @@ plot(arima$residuals, type="p", cex=0.5) # Heteroskedasticitet?
 arch.test(arima, output = TRUE) #  H0 förkastas -> heteroskedasticitet?
 
 
-# GARCH with fGarch (one way) ---------------------------------------------------------------------------
+# ARMA-GARCH ---------------------------------------------------------------------------
 
-fGarch = garchFit(
+armaGarch = garchFit(
   formula = ~ arma(1, 1) + garch(1, 1),
   data = train,
   trace = FALSE
 )
-summary(fGarch)
-fgarch_pred = predict(fGarch, n.ahead = 5)
+summary(armaGarch)
+armaGarch@fit$ics
+armaGarch_pred = predict(armaGarch, n.ahead = 5)
+armaGarch_pred
 
-rmse_fGarch = sqrt(mean((test[1:5] - fgarch_pred$meanForecast) ^ 2))
-rmse_fGarch
+rmse_armaGarch = sqrt(mean((test[1:5] - armaGarch_pred$meanForecast) ^ 2))
+rmse_armaGarch
+
+# Pure ARCH
+garch = garchFit(formula = ~ garch(1, 1),
+                 data = train,
+                 trace = FALSE)
+summary(garch)
+garch@fit$ics
+garch_pred = predict(garch, n.ahead = 5)
+garch_pred
+
+rmse_garch = sqrt(mean((test[1:5] - garch_pred$meanForecast) ^ 2))
+rmse_garch
 
 
 
-# GARCH (another way) --------------------------------------------------------------------------------
+# GARCH another way (old) --------------------------------------------------------------------------------
 
 #* ARCH(1,1) from auto_arima (1,1)
 arch = ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1, 1))) #  simplest GARCH, a lot available
@@ -71,7 +85,7 @@ ts.plot(test[1:5])
 lines(fitted(forecast), col="red")
 
 
-# Function for comparing ARCH -----------------------------------------------------------------
+# Function for comparing ARCH
 archInfoCriteria <- function(p, q) {
   arch = ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(p, q)))
   arch_fit = ugarchfit(spec = arch, data = train)
