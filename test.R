@@ -7,6 +7,9 @@ library(aTSA)
 # Loading data --------------------------------------------------------------------------------
 data = read.csv('data/final.csv', header = TRUE)
 
+
+
+
 # Choosing close column and plotting
 logreturns = data$logreturns
 ts.plot(logreturns, xlab = "Day", ylab = "Closing price")
@@ -44,7 +47,7 @@ infocriteria(arch_fit)
 plot(arch_fit)
 
 # Forecasting
-forecast = ugarchforecast(arch_fit, n.ahead = 5);
+forecast = ugarchforecast(arch_fit, n.ahead = 5); 
 rmse_arch = sqrt(mean((test[1:5] - forecast@forecast$seriesFor)^2))
 rmse_arch
 
@@ -74,3 +77,5 @@ archInfoCriteria(2,1)
 archInfoCriteria(1,2)
 archInfoCriteria(2,2)
 archInfoCriteria(7,7)
+
+
