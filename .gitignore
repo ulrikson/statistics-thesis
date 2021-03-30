@@ -3,4 +3,4 @@ venv/
 .Rhistory
 .RData
 .statistics-thesis.Rproj
-.vscode/
+.vscode/settings.json
