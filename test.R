@@ -13,7 +13,7 @@ test = data[train_size + 1:length(data$Close), ]
 
 # Choosing close column and plotting
 lr_train = train$logreturns
-ts.plot(logreturns, xlab = "Day", ylab = "Closing price")
+ts.plot(lr_train, xlab = "Day", ylab = "Closing price")
 abline(a = 0, 0, col = "red")
 
 # ARIMA -----------------------------------------------------------------------------
@@ -51,6 +51,9 @@ df2 = data[(train_size+1):(train_size+63),]
 df2$forecast = forecasted_price
 
 merged_df = rbind(df1, df2)
+
+
+# Writing to CSV for further analysis in Python -----------------------------------------------
 
 write.csv(merged_df, "data/r_results.csv", row.names=FALSE)
 
