@@ -22,22 +22,46 @@ auto_arima = auto.arima(lr_train, ic = "bic", seasonal = FALSE)
 arimaorder(auto_arima)
 arima = arima(lr_train, c(1, 0, 1)) #  inserting into model (needed for arch.test)
 
-plot(arima$residuals, type = "p", cex = 0.5) # Heteroskedasticitet?
 arch.test(arima, output = TRUE) #  Heteroskedasticitet!
 
 # ARMA-GARCH ---------------------------------------------------------------------------
 
-armaGarch = garchFit(
+fit_ics = function(p, q, x, y) {
+  model = garchFit(substitute(~ arma(p, q) + garch(x, y),
+                              list(
+                                p = p,
+                                q = q,
+                                x = x,
+                                y = y
+                              )),
+                   data = lr_train,
+                   trace = FALSE)
+  print(model@fit$ics)
+}
+
+# AIC, BIC
+fit_ics(0,0,1,0) # -6.782130, -6.776750
+fit_ics(0,0,1,1) # -6.937843, -6.930670
+fit_ics(0,1,1,1) # -6.950833, -6.941867
+fit_ics(1,0,1,1) # -6.953370, -6.944404
+fit_ics(1,1,1,1) # -6.965158, -6.954399 !BEST!
+fit_ics(1,1,2,1) # -6.964548, -6.951996
+fit_ics(1,1,2,2) # -6.964357, -6.950011
+fit_ics(2,1,2,2) # -6.964010, -6.947871
+fit_ics(2,2,2,2) # -6.963515, -6.945582
+
+
+# Best model, from above
+arma_garch = garchFit(
   formula = ~ arma(1, 1) + garch(1, 1),
   data = lr_train,
   trace = FALSE
 )
-summary(armaGarch)
-armaGarch@fit$ics
+summary(arma_garch)
 
 # 63 days ahead
-armaGarch = predict(armaGarch, n.ahead = 63)
-forecast = armaGarch$meanForecast
+arma_pred = predict(arma_garch, n.ahead = 63)
+forecast = arma_pred$meanForecast
 
 
 # Creating merged df -------------------------------------------------------------------------
@@ -51,6 +75,7 @@ df2 = data[(train_size+1):(train_size+63),]
 df2$forecast = forecasted_price
 
 merged_df = rbind(df1, df2)
+tail(merged_df)
 
 
 # Writing to CSV for further analysis in Python -----------------------------------------------
