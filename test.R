@@ -16,6 +16,11 @@ lr_train = train$logreturns
 ts.plot(lr_train, xlab = "Day", ylab = "Closing price")
 abline(a = 0, 0, col = "red")
 
+
+# Stationarity --------------------------------------------------------------------------------
+
+adf.test(lr_train, nlag=1)
+
 # ARIMA -----------------------------------------------------------------------------
 
 auto_arima = auto.arima(lr_train, ic = "bic", seasonal = FALSE)
