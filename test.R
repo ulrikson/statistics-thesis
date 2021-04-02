@@ -43,6 +43,8 @@ plot(
   main = 'Icke-stationär tidsserie'
 )
 
+par(mfrow=c(1,1))
+
 # Simulating non-stationary time series
 
 # Plotting
@@ -93,17 +95,21 @@ summary(arma_garch)
 # 63 days ahead
 arma_pred = predict(arma_garch, n.ahead = 63)
 forecast = arma_pred$meanForecast
+mean_error = arma_pred$meanError
 
 
 # Creating merged df -------------------------------------------------------------------------
 
 last_train = tail(train, 1)$Close
 forecasted_price = exp(cumsum(forecast) + log(last_train))
+mean_error_price = exp(cumsum(mean_error) + 0) # PROBABLY NOT RIGHT
 
 df1 = data[1:train_size,]
 df1$forecast = df1$Close
+df1$mean_error = 0
 df2 = data[(train_size+1):(train_size+63),]
 df2$forecast = forecasted_price
+df2$mean_error = mean_error_price
 
 merged_df = rbind(df1, df2)
 tail(merged_df)
