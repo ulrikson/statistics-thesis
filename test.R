@@ -19,7 +19,33 @@ abline(a = 0, 0, col = "red")
 
 # Stationarity --------------------------------------------------------------------------------
 
+# Testing time series for stationarity
 adf.test(lr_train, nlag=1)
+
+# Simulating stationary time series
+stationary <- rnorm(100, 0, 100)
+trend = 3*(1:100) + rnorm(100,0,10)
+
+par(mfrow=c(1,2))
+
+plot(
+  stationary,
+  type = 'l',
+  xlab = 'Tid',
+  ylab = expression('y'[t]),
+  main = 'Stationär tidsserie'
+)
+plot(
+  trend,
+  type = 'l',
+  xlab = 'Tid',
+  ylab = expression('y'[t]),
+  main = 'Icke-stationär tidsserie'
+)
+
+# Simulating non-stationary time series
+
+# Plotting
 
 # ARIMA -----------------------------------------------------------------------------
 
