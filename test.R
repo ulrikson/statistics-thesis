@@ -93,23 +93,28 @@ arma_garch = garchFit(
 summary(arma_garch)
 
 # 63 days ahead
-arma_pred = predict(arma_garch, n.ahead = 63)
+arma_pred = predict(arma_garch, n.ahead = 63, plot=TRUE)
 forecast = arma_pred$meanForecast
-mean_error = arma_pred$meanError
+lower = arma_pred$lowerInterval
+upper = arma_pred$upperInterval
 
 
 # Creating merged df -------------------------------------------------------------------------
 
 last_train = tail(train, 1)$Close
 forecasted_price = exp(cumsum(forecast) + log(last_train))
-mean_error_price = exp(cumsum(mean_error) + 0) # PROBABLY NOT RIGHT
+lower_price = exp(cumsum(lower) + log(last_train))
+upper_price = exp(cumsum(upper) + log(last_train))
 
 df1 = data[1:train_size,]
 df1$forecast = df1$Close
-df1$mean_error = 0
+df1$lower = df1$Close
+df1$upper = df1$Close
+
 df2 = data[(train_size+1):(train_size+63),]
 df2$forecast = forecasted_price
-df2$mean_error = mean_error_price
+df2$lower = lower_price
+df2$upper = upper_price
 
 merged_df = rbind(df1, df2)
 tail(merged_df)
