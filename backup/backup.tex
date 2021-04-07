@@ -1,0 +1,471 @@
+%Stil på uppsats
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[swedish]{babel}
+\renewcommand{\baselinestretch}{1.3}
+
+% Formattera text
+%\usepackage[text={14cm,22cm}]{geometry}
+
+\usepackage{booktabs}
+\usepackage{floatrow}
+\floatsetup[table]{capposition=top}
+\usepackage{amsmath}
+\usepackage{upgreek}
+\usepackage{graphicx}
+\graphicspath{ {./images/}}
+\usepackage{textgreek}
+\usepackage{sectsty}
+%\sectionfont{\large}
+%\subsectionfont{\small}
+
+\usepackage{afterpage}
+\usepackage{sectsty}
+\usepackage{caption}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{multirow}
+
+% Bibliography
+\usepackage[style=authoryear,sorting=nty]{biblatex} %Imports biblatex package
+\addbibresource{references.bib} %Import the bibliography file
+
+\usepackage[referable]{threeparttablex}
+\usepackage{booktabs}
+\usepackage{lipsum}
+
+\usepackage[export]{adjustbox} %För titelsida
+
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+	\begin{figure}[ht]
+	   \minipage{0.75\textwidth}
+			\includegraphics[width=7cm]{stat.png}
+			
+	   \endminipage
+	    \minipage{0.32\textwidth}
+		 \includegraphics[height = 3.5cm,width=4cm]{SU1.jpg}
+			
+\endminipage
+\end{figure}
+	
+	
+\centering
+\vspace{5cm}
+
+{\large\bfseries LSTM ARIMA-GARCH\par}
+	\vspace{0.5cm}
+	
+{\large\itshape Kandidatuppsats statistik \par}
+	\vfill
+	
+\begin{flushleft}
+Författare: Erik \& Erik \\
+Handledare: Ulf Högnäs\\
+ST312G Kandidatuppsats i statistik \\
+VT21
+\end{flushleft}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+\textbf{Allmänna saker (från Ulf)}
+\begin{itemize}
+    \item Ha med formler så gott det går
+    \item Var tydliga med hur vi skiljer oss från UU
+    \item Nödvändigt att ha med ARMA-GARCH pga nya tekniker såsom LSTM behöver ngt att benchmarkas mot
+    \item Omvandla logreturns tbx till priser innan RMSE/MAE osv
+\end{itemize}
+
+\textbf{NYA FRÅGOR}
+\begin{itemize}
+    \item Hur omvandlar man logreturns mean error till mean errors i pris?
+    \item Om vi enbart misstänker (vet) att det bara är en lag att ta hänsyn till, visst behöver vi inte använda Augmented Dickey-Fuller utan enbart Dickey-Fuller för att testa stationäritet?
+    \item behöver vi köra ACF och PACF även om vi kör AIC/BIC och väljer bästa möjliga modell utifrån det? Dessutom auto.arima.
+\end{itemize}
+
+\newpage
+
+
+%%%%%%%%%%%%%% INLEDNING %%%%%%%%%%%%%%%
+\clearpage
+\setcounter{page}{1} % ser till att page count börjar här
+
+\section{Inledning}
+Att förutspå aktiemarknaden sysselsätter miljontals människor världen över. Målet är att förutspå prisförändringar och på så vis tjäna pengar. Med tanke på aktiemarknadnaden volatititet är det såklart komplicerat. Det finns dock såväl statistisk- samt maskininlärningsmodeller att tillgå för att underlätta. Denna uppsats jämför två olika typer av sådana vanligt förekommande modeller. \par
+Jämförelsen mellan de olika modellerna kan ses som en jämförelse mellan det traditionella och det moderna. Maskininlärning och AI är väl omskrivet och anses av många vara framtiden. Populariteten har också gjort att det blivit allt enklare att applicera modeller, Microsoft har exempelvis en tjänst där det går att träna maskininlärningsmodeller utan att ens kunna programmera \parencite{lobe}. Statistisk, å andra sidan, kan uppfattas som mer förlegat, inte lika modernt. Det bör dock noteras att många maskininlärningsmodeller baseras på välkända statistiska koncept såsom regression. En jämförelse mellan söktrender på Google visar hur relativa sökningar på termen 'machine learning' kraftigt ökat under 2010-talet, medan 'statistics' snarare minskat. 
+\begin{figure}[H]
+\caption{Jämförelse av relativa mängden sökningar för 'statistics' och 'machine learning' över tid.}
+\includegraphics[width=0.9\linewidth]{ml_vs_stat.png}
+\centering
+\end{figure}
+Det är den här jämförelsen, mellan statistikmodellen ARMA-GARCH och maskininlärningsmodellen LSTM, denna uppsats syftar att utföra. Rent konkret söker uppsatsen att besvara frågeställningen: \par 
+\emph{Vilken av modellerna LSTM eller ARIMA-GARCH genererar mer precisa prediktioner på svenska småbolagsindex?}. \par
+Detta kommer att göras genom att anpassa respektive model till datasetet och sedan jämföra magnituden av fel modellerna gör när de predicerar utvecklingen på indexet under en dag, en halv börsvecka, en hel börsvecka, en börsmånad och ett börskvartal framåt i tiden. \par 
+Upplägget för uppsatsen är som följer: I avsnitt 1.1 presenteras tidigare studier, i 1.2 avgränsningar, i avsnitt 2. presenteras metoden och datamaterialet, i avsnitt 3. presenteras resultatet av analysen och i avsnitt 4. diskuteras resultaten och slutsatserna av studien. \par
+
+
+%%%%%%%%%%%%%% TIDIGARE STUDIER %%%%%%%%%%%%%%%
+\subsection{Tidigare studier}
+Tidigare studier har jämfört ARIMA med LSTM på Stockholmsbörsens index av de 30 största företagen, OMXS30. Andréasson och Mortensen Blomquist \parencite*{andreasson2020forecasting} jämför prediktioner på sju-, 30- och 90- dagars sikt. Deras studie visar att LSTM presterar bättre på 30- och 90 dagar och jämförbart med ARIMA på sju dagars sikt. Ferreira de Melo Filho \parencite*{ferreira2019predicting} jämför Artificella Neurala Nätverk (ANN), vilket LSTM är en underkategori till, med ARIMA. Författaren når slutsatsen att ANN mycket väl kan användas istället för ARIMA. \par 
+Liknande studier har även gjorts utomlands. Siami-Namini och Namin \parencite*{siami2018forecasting} jämför ARIMA och LSTM över flertalet utländska storbolagsindex (bl.a. NASDAQ och S\&P500) och även de når slutsatsen att LSTM är överlägsen ARIMA.\par 
+Gemensamt för de flesta studier på området är att de dels kollat på det storbolagsindex samt att de jämfört ARIMA med maskininlärningsmodeller. Denna uppsats skiljer sig genom att använda ARMA-GARCH istället för ARIMA, kortare prediktionsperioder, småbolagsindex samt andra valideringsmetoder.
+
+%%%%%%%%%%%%%% AVGRÄNSNINGAR %%%%%%%%%%%%%%%
+\subsection{Avgränsningar}
+Uppsatsen är begränsad till att enbart beröra small-cap index på Stockholmsbörsen. Slutsatserna av analysen av vilken metod som är bäst går således inte nödvändigtvis att applicera på andra index eller enskilda aktier. Resultatet går inte heller nödvändigtvis att generalisera utanför de valda prediktionsperioderna.
+
+\newpage
+\section{Teori}
+%%%%%%%%%%%%%% TEORI %%%%%%%%%%%%%%%
+\subsection{Effektiva marknadshypotesen (EMH)}
+Den effektiva marknadshypotesen, även känd som EMH, är en term som definerades första gången av Harry Roberts (1967) och utvecklades några år senare av Eugene Fama (1970) \parencite{EMHhistory} i artikeln \emph{"Efficent Capital Markets; A Review of Theory and Empirical Work"}. I denna artikel beskrivs en marknad som effektiv när priserna reflekterar all tillgänglig information - det måste vara omöjligt att kunna förutspå upp- och nedgånggar i framtida priser hos den underliggande marknaden \parencite{Fama1970}. EMH kan delas upp i tre olika definitioner av marknadseffiktivitet: \emph{Svag form}, \emph{halvsvag form} samt \emph{stark form}. 
+
+\emph{Svag form} betyder att framtida priser omöjligt kan predikteras genom att analysera historisk data .
+
+\emph{Halvstark form} är en mer restriktiv variant som inkluderas av att all offentlig information redan reflekterats i priserna. 
+
+\emph{Stark form} som är den mest restriktiva betyder att priserna återspeglar all information som finns tillgänglig.
+
+
+
+\subsection{Stationäritet}
+Stationäritet är centralt vid analys av tidsserier. En väsentlig egenskap hos stationära tidsserier är de inte påverkas av stora temporära förändringar (s.k. chocker) över tid, utan dessa effekter försvinner relativt snabbt. I en icke-stationär tidsserie förblir chocker och påverkar framtida värden på tidsserien. \par
+I strikt mening innebär stationäritet att tidsserien uppvisar liknande 'statistikt beteende' över tid. Vanligtvis används dock svag stationäritet, vilket definieras som 1) tidsseriens förväntade värde beror inte på tid, \(E(y_t)=\mu_y\) och 2) autokovariansfunktionen är enbart en funktion av k och inte tid, \(\gamma_y(k) = Cov(y_t, y_{t+k})\) \parencite{montgomery2015forecasting}. För att illustrera stationäritet följer ett exempel på en typiskt stationär och en typiskt icke-stationär tidsserie.
+
+\begin{figure}[H]
+\caption{Illustration av stationäritet med simulerad data}
+\includegraphics[width=0.9\linewidth]{stationarity.png}
+\centering
+\end{figure}
+
+\subsubsection{Test för stationäritet}
+För att testa stationäritet kan Dickey-Fuller test användas \parencite{dickey1979distribution}. Nollhypotesen är att en enhetsrot finns och alltså ingen stationäritet, dvs. \(\rho = 1\). Alternativhypotesen är att \(\rho < 1\). Låt \(y_t\) vara beroende variabeln (logreturns), \( \alpha \) en driftterm och \(e\) är felterm \parencite{wooldridge2018introductory}. Formeln är som följer
+
+\begin{equation}
+    y_t = \alpha + \rho y_{t-1} + e_t
+\end{equation}
+
+En utveckling av Dickey-Fuller-testet är Augmented Dickery-Fuller-test som tar hänsyn till ytterligare k laggar i y. Som analysen av datan kommer visa finns dock ingen anledning att ta med mer än en lag och alltså inget behov av Augmented Dickey-Fuller-test.
+
+
+\subsection{ARMA-GARCH}
+Som diskuterades i introduktionen har tidigare studier använt ARIMA för prediktioner. Nackdelen med ARIMA är dock att variansen antas vara konstant \parencite{montgomery2015forecasting}. För att hantera inkonstant varians (heteroskedasticitet) utvecklades ARCH och GARCH av Engle \parencite*{engle1982autoregressive} respektive Bollerslev \parencite*{bollerslev1986generalized}. Nackdelen är dock att ARCH/GARCH inte fångar systematiska skillnader i medelvärde över tid. Genom att kombinera ARMA och GARCH till en hybridmodel, ARMA-GARCH, går det att fånga systematiska skillnader i medelvärdet av tidsserien över tid med ARMA-komponenten såväl som systematiska skillnader i varians med GARCH-komponenten. Modellen är relativt ny men har snabbt blivit populär inom flera olika områden \parencite{chen2011short}.\par 
+
+Nedan följer formeln för modellen. \(e_t\) är vitt brus (felterm), \(delta\) en konstant, \(\phi_i\) vikter för laggade beroende variabel i AR(p), \(\theta_i\) vikter för laggade feltermen i MA(q), \(z_t\) är oberoende och identiskt fördelade med medelvärde 0 och varians 1, w en konstant, \(\alpha_i\) vikt för ARCH-termen och \(\beta_i\) vikt för GARCH-termen \parencites{bollerslev1986generalized}{montgomery2015forecasting}.
+
+\begin{equation}
+    y_t = \delta + \sum_{i=1}^{p}\phi_iy_{t-i}  +e_t - \sum_{i=1}^{q}\theta_i e_{t-i} 
+\end{equation}
+\begin{equation}
+    e_t=\sqrt{\sigma_t}*z_t,\quad \sigma^2_t=w + \sum_{i=1}^{q}\alpha_i e^2_{t-i} + \sum_{i=1}^{p}\beta_i \sigma^2_{t-i}
+\end{equation}
+
+Förenklat uttryckt modellerar alltså ARMA den beroende variabeln i (2) och GARCH feltermern i (3).
+
+\subsubsection{Test för heteroskedasticitet}
+Som tidigare nämnts finns ingen anledning att använda GARCH-komponenter om det inte finns tecken på heteroskedasticitet. För att testa om tidsserien är heteroskedastisk används Lagrange Multiplier test (LM-test). LM-testet utgår från att modellera bästa möjliga AR-modell, sedan ta dess kvadrerade feltermerna \(e_t^2\) och modellera en regression på dessa. Regressionen består av en konstant \(\alpha_0\) och laggade feltermer \(e_{t-i}\) enligt:
+
+\begin{equation}
+    e_t^2=\alpha_0+\sum_{i=1}^{p}\alpha_ie_{t-i}^2
+\end{equation}
+
+Nollhypotesen är att alla \(\alpha_i\) = 0, vilket tyder på avsaknad av ARCH-komponenter i feltermen (homoskedasticitet). Alternativhypotesen är att sådana komponenter finns (heteroskedasticitet) och därför att det finns belägg för att använda ARCH och/eller GARCH-modeller \parencite{engle1982autoregressive}. \par
+
+\subsubsection{Val av optimal modell}
+En statistika behövs för att avgöra vilket antal tidslaggar (p och q) som är optimalt för ARMA-GARCH-modellen. Två vanligt förekommande sådan mått är Akaike Information Criterion (AIC) samt Schwarz Bayesian Information Criterion (BIC). Modellerna bestraffas för att inkludera ytterligare parametrar, vilket alltså gör det perfekt för att hitta optimalt antal laggar (en ytterligare lag mostvarar en ytterligare parameter). Ju lägre värde, desto bättre \parencite{montgomery2015forecasting}. Låt T vara antal observationer, e felterm och p antal parametrar:
+\begin{equation}
+    AIC = ln\left( \frac{\sum_{t=1}^{T}e^2_t}{T} \right)+\frac{2p}{T}
+\end{equation}
+\begin{equation}
+    BIC = ln\left( \frac{\sum_{t=1}^{T}e^2_t}{T} \right)+\frac{ln(T)p}{T}
+\end{equation}
+
+
+\subsection{Long Short Term Memory (LSTM)}
+Long Short-Term Memory (LSTM) är en typ av upprepat neuralt nätverk (en: recurrent neural network, RNN). För att förstå LSTM behövs en grundläggande förståelse av neurala nätverk. \par
+
+Ett neuralt nätverk är en struktur av sammankopplade neuroner, inspirerad av biolgiska neurala nätverk. Nätverket består av flertalet olika algoritmer som tillsammans utför beräkningar. Upprepade neurala nätverk (RNN) är neurala nätverk som är särskilt bra på att hantera temporär data. Varje neurons celler har ett 'minne', där all indata behandlas med hjälp av loopar. På så sätt kan de 'komma ihåg' tidigare data. Dock inte särskilt länge, vilket är varför LSTM behövs \parencite{purkait2019hands}. \par
+LSTM-nätverk kan behålla information i ett 'långsiktigt minne' (en: \textit{state}), som förs över mellan tidsperioder. En LSTM-cell ser ut som följer:
+\begin{figure}[H]
+\caption{LSTM-cellens struktur \parencite[lånad från][]{yuan2019nonlinear}}
+\includegraphics[width=10cm]{lstm.png}
+\centering
+\end{figure}
+
+Varje LSTM-cell har tre indata; minnet från tidigare steg \(c_{t-1}\), indatan från tidigare steg \(h_{t-1}\) och den nya indatan \(x_{t}\). De mörkblåa fyrkanterna märker de tre 'grindarna' som finns i LSTM. Först kommer 'forget gate', det är den som gör att LSTM skiljer sig från vanliga RNNs. Detta eftersom 'forget gate' bestämmer huruvida indatan från tidigare steg (\(h_{t-1}\)) ska behållas eller förkastas från state. Beslutet görs baserat på värdet i förra tidsperioden och den nya indatan, genom att ge denna olika vikter mellan 0 och 1 (där 1 är högst vikt). 'Input gate' kontrollerar flödet av information i det befintliga cellminnet. Denna grind bestämmer vilken ny information som ska läggas till i state. I den sista grinden, 'output gate', avgörs vad som ska läggas till i det 'dolda state' (\(h_{t}\)) inför nästa tidsperiod. Sammanfattningsvis tar varje neurons cell emot tre indata och skicka vidare två utdata till nästa cell. Detta itereras sedan över alla datapunkter och efter den sista iterationen omvandlas 'dolda state' till utdata i önskat format. \parencite{purkait2019hands} \par
+Väldigt förenklat kan det alltså förklaras som  att för varje tidpunkt i datan (i detta fall priser på small cap index) skickas datan in i LSTM-cellerna, itereras i dessa där det avgörs vad som ska tas med i beräkningarna av nästa datapunkt (t+1), itereras sedan över alla datapunkter och till slut görs prediktioner baserat på modellen. \par
+Definiera \(x_t\) som indatavektorn, \(f_t\) som 'forget gates' aktiveringsvektor, \(i_t\) 'input gate' aktiveringsvektor, \(O_t\) 'output gate' aktiveringsvektor, \(h_t\) 'dolda state' vektorn (även kallad utdatavektorn), \(\tilde{c_t}\) cellens indataaktiveringsvektor, \(c_t\) cellens statevektor, \(W, U, b\) vikt- och biasmatriser som modellen lär sig under träning. \(\sigma\) är sigmoidfunktion och tanh hyperbolisk tangentfunktion. Cirklarna representerar elementvis produkt. Nedsänkt i hänvisar till 'input gate', nedsänkt o till 'outpunk gate', nedsänkt f till 'forget gate', c till minnescellen och t till tidpunkt \parencite{purkait2019hands}. 
+
+\begin{equation}f_t = \sigma(W_f x_t + U_f h_{t-1} + b_f)\end{equation}
+\begin{equation}i_t = \sigma(W_i x_t + U_i h_{t-1} + b_i)\end{equation}
+\begin{equation}o_t = \sigma(W_o x_t + U_o h_{t-1} + b_o)\end{equation}
+\begin{equation}\tilde{c}_t = tanh(W_c x_t + U_c h_{t-1} + b_c)\end{equation}
+\begin{equation}c_t= f_t \circ c_{t-1} + i_t \circ \tilde{c}_t\end{equation}
+\begin{equation}h_t= o_t \circ tanh(c_t)\end{equation}
+
+Sammanfattat styr alltså (7) vad som händer i 'forget gate', (8) 'input gate' och (9) 'output gate'. I (10) kombineras dessa tre ekvationer, i (11) skapas utdatan och den multipliceras sedan med det befintliga 'dolda state' i (12). 
+
+
+\newpage
+\section{Metod och datamaterial}
+%%%%%%%%%%%%%% METOD %%%%%%%%%%%%%%%
+I det här avsnittet beskrivs de modeller som används, varför de väljs och hur de utvärderas. En beskrivning över dataset görs också. 
+\subsection{ARMA-GARCH}
+En förutsättning för att använda ARMA-GARCH är att tidsserien är stationär, därför används Dickey-Fuller-testet. För att sedan välja ARMA-GARCH-modell testas först för heteroskedasticitet med LM-testet på bästa möjliga ARIMA-modell (genom funktionen \textit{auto.arima} i R). Givet att denna indikerar heteroskedasticitet väljs sedan bästa möjliga ARMA-GARCH-modell baserat på AIC och BIC. 
+
+\subsection{Long Short-Term Memory (LSTM)}
+För att skatta en modell med LSTM behöver modellen så kallade hyperparametrar. Dessa hyperparametrar är olika för olika modeller och alla behöver inte specifieras. Tidigare studier hävdar till och med att värdet på hyperparametrarna inte har en väsentlig påverkan på utfallet \parencite{dreyfus2005neural}. Nedan följer de parametrar där det finns studier på hur de bör specifieras. Eftersom övriga parametrars specifikation inte ska ha någon väsentlig påverkan har dessa valts utifrån vad som är vanligt förekommande.
+
+Hyperparametrarna med gedigen forskning bakom sig är \emph{loss function, optimizer och epochs}. \par
+\emph{Loss function} är ett mått på hur väl modellen presterar på träningsdatan. Förlustfunktionen används som ett mått på modellens fel och detta ska minimeras. MSE (Mean Square Error) rekommenderas för de flesta 'regressionsliknande' modeller, och därför även i detta fall \parencite{purkait2019hands}. \par
+\emph{Optimizer} är den typ av algoritm som används för att minimera det ovan beskrivna felet. 'Adam' är en optimeringsalgoritm som visat sig fungera bra för stora dataset och rekommenderas av Purkait \parencite{purkait2019hands}. \par
+\emph{Epochs} indikerar antal gånger modellen kommer att itererar genom hela datasetet. Tidigare studier har kommit fram till att valet inte har någon relevant betydelse för hur väl modellen presterar \parencite{siami2018forecasting}. Då Purkait använder fem epoker för LSTM, kommer även denna uppsats använda fem \parencite{purkait2019hands}. \par
+
+
+\newpage
+%%%%%%%%%%%%%% VALIDERING %%%%%%%%%%%%%%%
+\section{Validering}
+\subsection{RMSE}
+
+För att mäta hur väl LSTM presterar på tränings- och testdatan används måttet RMSE (\emph{RMSE: Root mean square error}) som är ett mått på spridningen av residualerna mellan skattade och faktiska värden. Den bärande egenskapen hos RMSE är att större prediktionsfel får relativt större vikt då måttet baseras på ett viktat medelvärde enligt
+
+\begin{equation*}
+RMSE = \sqrt{\frac{1}{n}\Sigma_{i=1}^{n}   (\hat{\theta_{t}} - \theta_{t}})^2
+\end{equation*}
+
+där \emph{n} är det totala antalet observationer, $\theta_{t}$ är den faktiska prisnivån och $\hat{\theta_{t}}$ är den skattade prisnivån under handelsdag \emph{t}. 
+
+\subsection{MAPE}
+    
+Utöver RMSE används MAPE som ges av
+
+\begin{equation*}
+    \textit{MAPE}=\frac{1}{n} 
+    \sum_{t=1}^{n} \vert \frac{A_{t}-F_{t}}{A_{t}} \vert \times 100
+\end{equation*}
+
+Där $A_{t}$ är den aktuella prisnivå och $F_{t}$ är den predikterade prisnivån under handelsdag $t$. 
+
+\subsection{Utvärdering av modellernas prestation}
+
+För att mäta hur väl modellerna predikterar en stigande respektive fallande prisnivå används en sammanblandsningsmatris som registrerar antal korrekta och inkorrekta klassifikationer \parencite{ModelValidation}. I Tabell 1 syns en sammanblandningsmatris för den binära klassifikationen. 
+
+\begin{table}[H]
+\caption{Binär klassifikation}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+         & \multicolumn{2}{c}{Predikterade värden}  \\ \midrule
+Aktuella & Sann stigande (SS)  & Falsk fallande (FF) \\
+värden   & Falsk stigande (FS) & Sann fallande (SF)  \\ \bottomrule
+\end{tabular}
+\end{table}
+
+Precisionen mäts av andelen korrekt skattade stigande prisnivåer angivet i procent
+
+
+\begin{equation}
+    \textit{Precision} = \frac{\sum(SS)}{\sum(SS)+\sum(FS)}
+\end{equation}
+
+Känsligheten i modellens predikteringar mäts genom att dividera antalet korrekt skattade stigande predikteringar med det totala antalet stigande prisnivåer
+
+\begin{equation}
+    \textit{Känslighet} = \frac{\sum(SS)}{\sum(SS)+\sum(FF)}
+\end{equation}
+
+
+Utifrån ekvation (2) och (3) härleds slutligen F-värdet enligt
+
+\begin{equation*}
+    \textit{F} = \frac{(\beta^2+1) \times \textit{Precision} \times \textit{Känslighet}}{\beta^2 \times \textit{Precision} + \textit{Känslighet}}
+\end{equation*}
+
+för att vikta måtten lika används $\beta=1$ \parencite{ModelValidation}, enligt
+
+\begin{equation*}
+    \textit{F1}= 2 \times \frac{\textit{Precision} \times \textit{Känslighet}}{\textit{Precision} + \textit{Känslighet}}
+\end{equation*}
+
+Där $F1=1$ är det högsta värdet vilket betyder att modellen inte har några felaktiga predikteringar. $F1=0$ är det lägsta värdet och indikerar att samtliga skattningar om framtida prisnivåer utifrån modellen är felaktiga.
+
+
+
+
+
+\newpage
+%%%%%%%%%%%%%% DATAMATERIAL %%%%%%%%%%%%%%%
+\subsection{Datamaterial}
+Historisk data av OMX Stockholm Small Cap PI Index (OMXSSCPI) hämtades i kommasepererat filformat (\emph{.csv}) från Refinitiv Eikon, som är en ledande ditributör av finansiell data som används av över 40 000 institutioner värden över \parencite{Eikon}. 
+
+
+
+\begin{table}[H]
+\centering
+\caption{Deskriptiv statitistik av stängningskurs}
+\label{tab:my-table}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}cccccccc@{}}
+\toprule
+Index     & Start       & Slut        & N    & Min       & Medelvärde & Max      & SD         \\ \midrule
+.OMXSSCPI & 30 dec 2002 & 12 feb 2021 & 4564 & 88.54 & 436.45   & 1254.09 &  264.05 \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+
+Datauppsättningen innehåller data på stängningspriser från 12 februari 2001 till 12 februari 2021 som inkluderar totalt 93 småbolag, vilka defineras som bolag med ett börsvärde som understiger 150 miljoner euro \parencite{smabalagsdefinition}. 
+
+
+\begin{figure}[H]
+\caption{Tidsserie över dagliga stängningspriser för OMXSSCPI}
+\includegraphics[width=15cm]{stängning.png}
+\centering
+\end{figure}
+
+De totalt 4564 datapunkterna omfattas av dagliga stängningspriser under perioden som normaliseras genom logaritmering av de dagliga stäningspriserna. För att skapa  logaritmerad avkastning. Låt \(S_t\) vara stängningspriset i period t, \(S_{t-1}\) stängningspriset i period \emph{t-1} och \emph{t} vara tiden. 
+
+\begin{equation*}
+    r_{i} = \frac{S_{t} - S_{t-1}}{S_{t-1}}
+\end{equation*}
+
+Då \emph{t} alltid representerar en börsdag kan uttrycket förenklas till
+
+\begin{equation*} \label{eq1}
+\begin{split}
+p_{t} & = ln(\frac{S_{t}}{S_{t-1}}) \\
+ & = lnS_{t} - lnS_{}
+\end{split}
+\end{equation*}
+
+Avkastning är att föredra före prisnivån eftersom prisutvecklingen över tid sällan är stationärt. Avkastningen har logaritmerats eftersom det gör den symmetrisk - positiva och negative procentuella ordinarie avkastningar av samma magnitud tar ut varandra. Nedan följer deskriptiv statistik över datan.
+
+\begin{figure}[H]
+\caption{Tidsserie över den dagliga logaritmerade avkastningen}
+\includegraphics[width=15cm]{logged.png}
+\centering
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Deskriptiv statitistik av logaritmerad avkastning}
+\label{tab:my-table}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}cccccccc@{}}
+\toprule
+Index     & Start       & Slut        & N    & Min       & Medelvärde & Max      & SD         \\ \midrule
+.OMXSSCPI & 30 dec 2002 & 12 feb 2021 & 4564 & -0.131 & 0.000554   & 0.070 & 0.009 \\ \bottomrule
+\end{tabular}%
+}
+\end{table}
+
+Prediktioner kommer göras en, tre och fem dagar fram i tiden. För att kunna utvärdera modellerna har datan delats in i träningsdata (75\%) och testdata (25\%). Där den första används för att göra prediktioner och den senare för att jämföra med. \par
+
+
+\newpage
+
+\textbf{Skiss på datamaterials-del} \par
+Det dagliga stäningspriset $S$ i ett aktieindex kan defineras som den proportionella avkastningen $r_{i}$ vid tidpunkt $t$ enligt
+
+\begin{equation*}
+    r_{i} = \frac{S_{t} - S_{t-1}}{S_{t-1}}
+\end{equation*}
+
+Den proportionella avkastningen kan i motsats till prisnivån med fördel användas vid jämförelse av procentuell variation över tidsperioder. För att stabilisera variationen transformeras den dagliga avkastningen enligt
+
+\begin{equation*} \label{eq1}
+\begin{split}
+p_{t} & = ln(\frac{S_{t}}{S_{t-1}}) \\
+ & = lnS_{t} - lnS_{}
+\end{split}
+\end{equation*}
+
+Som är differensen mellan det logaritmerade stängningspriset vid tidpunkt \emph{t} och logaritmen av stängningspriset under föregående börsdag. Under dessa egenskaper brukar $p_{t}$ kallas för den logaritmerade avkastningen.
+
+
+
+\newpage
+%%%%%%%%%%%%%% RESULTAT %%%%%%%%%%%%%%%
+\section{Resultat}
+\subsection{ARMA-GARCH modellvalidering}
+Dickey-Fuller testet är signifikant med p-värdet 0.01. Således kan tidsserien (logreturns) antas vara stationär. \par 
+Lagrange-Multiplier test på den optimala ARIMA-modellen [ARIMA(1,0,1) = ARMA(1,1)] visar tydliga tecken på heteroskedasticitet, p-värdet är 0.00. Därför finns belägg för att inkludera en GARCH-komponent och således en ARMA-GARCH-modell . \par 
+AIC och BIC visar att ARMA(1,1)-GARCH(1,1) är den bästa möjliga modellen. AIC för denna modell är -6.97 och BIC -6.95.
+
+\subsection{Precision, Känslighet och F-värde}
+
+Nedan följer känslighet, precision och F-värde för de bägge modellerna.
+
+\begin{table}[H]
+\begin{tabular}{||lllllll||}
+\hline
+                                     &            & \multicolumn{5}{l||}{Tidsperiod}                                  \\
+Mått                                 &            & \textbf{1} & \textbf{3} & \textbf{5} & \textbf{21} & \textbf{63} \\ \hline\hline
+\multirow{2}{*}{\textbf{Precision}}  & LSTM       & 1          & 1          & 1          & 1           & 0,75        \\
+                                     & ARMA-GARCH & 1          & 1          & 1          & 1           & 1           \\ \cline{2-7} 
+\multirow{2}{*}{\textbf{Känslighet}} & LSTM       & 1          & 0,33       & 0,60       & 0,61        & 0,53        \\
+                                     & ARMA-GARCH & 1          & 0,33       & 0,60       & 0,61        & 0,58        \\ \cline{2-7} 
+\multirow{2}{*}{\textbf{F-score}}    & LSTM       & 1          & 0,5        & 0,75       & 0,765       & 0,629       \\
+                                     & ARMA-GARCH & 1          & 0,5        & 0,75       & 0,765       & 0,74        \\ \hline
+\end{tabular}
+\end{table}
+Modellerna ger liknande resultat upp till 21 perioder. Det beror på att båda uppfattar en positiv trend under det spannet. Vid 63 perioder uppfattar LSTM dock en negativ trend under delar av intervallet, vilket gör att dess värden blir något lägre än ARMA-GARCH. Värt att notera är att precisionen är 1 för samtliga tidsperioder hos ARMA-GARCH, vilket beror på att modellen predicerar stigande i alla tidsperioder (t=1, ..., t=63).
+
+\subsection{RMSE och MAPE}
+
+\begin{table}[H]
+\caption{LSTM validering}
+\label{tab:my-table}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{6}{|c|}{Antal tidssteg}             \\ \hline
+Metod & 1     & 3     & 5     & 21     & 63      \\ \hline
+RMSE  & 1.035 & 4.716 & 5.57  & 14.348 & 129.238 \\ \hline
+MAPE  & 0.166 & 0.552 & 0.469 & 0.746  & 2.55    \\ \hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+\newpage
+\section*{Bilagor}
+\begin{figure}[H]
+\caption{Histogram över den dagliga logaritmerade avkastningen}
+\includegraphics[width=12cm]{Hist.png}
+\centering
+
+\end{figure}
+
+\newpage
+\section*{Hit ratio (Flyttades hit sålänge som plan b kanske raderar snart)}
+För att mäta hur väl modellerna predikterar framtida prisrörelser används \emph{Hit ratio} \parencite{10.1371/journal.pone.0155133} som mått på träffsäkerheten hos prediktionerna och defineras som 
+
+\begin{equation*}
+\textit{Hit ratio}=\frac{1}{n} \sum_{n=1}^{n}P_{i}
+\end{equation*}
+Där $P_{i}$ är det predikterade värdet under dag \emph{i} och defineras som 
+
+\begin{equation*}
+P_{i} = 
+\begin{cases}
+
+1, (y_{t+1}-y_{t})(\hat{y}_{t+1}-\hat{y}_{t}) > 0, \\
+0, & \text{annars}
+
+\end{cases}
+\end{equation*}
+
+Där $y_{t}$ är det aktuella stängingspriset och $\hat{y}_{t}$ är det prediterade stäningspriset för dag $i$. 
+
+
+
+\newpage
+\printbibliography
+\end{document}
