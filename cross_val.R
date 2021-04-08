@@ -14,7 +14,8 @@ lower = c()
 upper = c()
 
 i = 1
-while (i <= 100) {
+forecast_len = 1000
+while (i <= forecast_len) {
   train_size = round(length(data$Close) * 0.75) + i - 1
   train = data[1:train_size, ]
   test = data[(train_size+1) : length(data$Close), ]
@@ -39,12 +40,14 @@ while (i <= 100) {
   lower = c(lower, lower_price)
   upper = c(upper, upper_price)
   
-  print(paste(i, "of 100"))
+  print(paste(i, "of", forecast_len))
   
   i = i+1
 }
-#* Note: The whole while process needs to finish before continuing
-#* Look in the console
+#* Note: Hela while-loopen måste köras innan man kan fortsätta
+#* Kolla consolen, den printar vad den håller på med
+#* Jag timeade, och 1000 bör ta ca. 10 min  att köra
+#* Finns säkert smidigare sätt, men det är bara en engångsgrej
 
 df = data.frame(time, Close, forecast, lower, upper)
 
