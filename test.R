@@ -9,7 +9,7 @@ data = subset(data, select = c('Exchange.Date', 'Close', 'logreturns'))
 
 train_size = round(length(data$Close) * 0.75)
 train = data[1:train_size, ]
-test = data[train_size + 1:length(data$Close), ]
+test = data[(train_size+1):length(data$Close), ]
 
 # Choosing close column and plotting
 lr_train = train$logreturns
