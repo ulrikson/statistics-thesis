@@ -39,13 +39,14 @@ while (i <= 100) {
   lower = c(lower, lower_price)
   upper = c(upper, upper_price)
   
+  print(paste(i, "of 100"))
+  
   i = i+1
 }
-#* Note: The whole while process needs to finish before doing the following
-#* This takes a while, it's done when the plots stop shifting...
+#* Note: The whole while process needs to finish before continuing
+#* Look in the console
 
 df = data.frame(time, Close, forecast, lower, upper)
-
 
 write.csv(df, "data/r_cross_val.csv", row.names=FALSE)
 
