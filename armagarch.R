@@ -12,6 +12,9 @@ train_size = round(length(data$Close) * 0.75)
 train = data[1:train_size, ]
 test = data[(train_size+1):length(data$Close), ]
 
+tail(train,1)
+head(test,1)
+
 # Choosing close column and plotting
 lr_train = train$logreturns
 ts.plot(lr_train, xlab = "Day", ylab = "Closing price")
