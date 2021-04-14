@@ -1,6 +1,7 @@
 library(forecast)
 library(aTSA)
 library(fGarch)
+library(urca)
 
 
 # Loading data --------------------------------------------------------------------------------
@@ -21,6 +22,9 @@ abline(a = 0, 0, col = "red")
 
 # Testing time series for stationarity
 adf.test(lr_train, nlag=1)
+
+adf_auto = ur.df(lr_train, selectlags = "AIC")
+summary(adf_auto)
 
 # Simulating stationary time series
 stationary <- rnorm(100, 0, 100)
