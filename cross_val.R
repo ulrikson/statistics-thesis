@@ -10,6 +10,8 @@ data = subset(data, select = c('Exchange.Date', 'Close', 'logreturns'))
 time = c()
 Close = c()
 forecast = c()
+lower = c()
+upper = c()
 
 i = 1
 forecast_len = 1000
@@ -26,13 +28,17 @@ while (i <= forecast_len) {
     trace = FALSE
   )
   
-  arma_pred = predict(arma_garch, n.ahead = 63)
+  arma_pred = predict(arma_garch, n.ahead = 63, plot=TRUE)
   last_train = tail(train, 1)$Close
   forecasted_price = exp(cumsum(arma_pred$meanForecast) + log(last_train))
+  lower_price = exp(cumsum(arma_pred$lowerInterval) + log(last_train))
+  upper_price = exp(cumsum(arma_pred$upperInterval) + log(last_train))
   
   time = c(time, rep(i, 63))
   Close = c(Close, head(test,63)$Close)
   forecast = c(forecast, forecasted_price)
+  lower = c(lower, lower_price)
+  upper = c(upper, upper_price)
   
   print(paste(i, "of", forecast_len))
   
@@ -43,7 +49,8 @@ while (i <= forecast_len) {
 #* Jag timeade, och 1000 bör ta ca. 10 min  att köra
 #* Finns säkert smidigare sätt, men det är bara en engångsgrej
 
-df = data.frame(time, Close, forecast)
+df = data.frame(time, Close, forecast, lower, upper)
+head(df, 63)
 
 write.csv(df, "data/r_cross_val.csv", row.names=FALSE)
 
