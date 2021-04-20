@@ -94,13 +94,13 @@ TODO
 \begin{comment}
 Hej igen!
 
-Här kommer vårat först utkast. Säg gärna till när du tror att du har möjlighet att hunnit läsa igenom det och kan ta ett videomöte.
+Här kommer vårat först utkast. Säg gärna till när du haft möjlighet att hunnit läsa igenom det och kan ta ett videomöte.
 
-Det förekommer definitivt slarvel (formalia, ekvationer som har fel namn osv) men vi har inte prioriterat att fixa dessa just nu, utan tar det inför slutinlämningen (det lär ändå hinna ändras)
+Det förekommer definitivt slarvel (formalia, ekvationer som har fel namn osv) men vi har inte prioriterat att fixa dessa just nu, utan tar det inför slutinlämningen (det lär ändå hinna ändras).
 
 Två frågor vi vill skicka med är:
-- Vad tycker du vi kan utveckla för att ta detta till nästa nivå? Det känns som vi har både tid och plats att göra något extra.
-- En idé vi har är att simulera en trading-strategi likt http://cs230.stanford.edu/projects_winter_2020/reports/32066186.pdf, för att se vilken av modellerna som hade varit bäst att tradea med. Det ger också mer relaterbara resultat eftersom vi kan sätta ett pengavärde på hur bra modellerna presterar. Vad tror du om det?
+- Vad tycker du vi kan utveckla för att ta detta till nästa nivå? Det känns som vi har både tid och plats för det.
+- En idé vi har är att simulera en trading-strategi likt http://cs230.stanford.edu/projects_winter_2020/reports/32066186.pdf, för att se vilken av modellerna som hade varit bäst att tradea med. Det ger också mer relaterbara resultat eftersom vi kan sätta ett pengavärde på hur bra modellerna presterar. Vad tror du om det? 
 
 Ser fram emot din feedback!
 
@@ -150,9 +150,9 @@ Upplägget för uppsatsen är som följer: I avsnitt 1.1 presenteras tidigare st
 %%%%%%%%%%%%%% TIDIGARE STUDIER %%%%%%%%%%%%%%%
 \subsection{Relaterad forskning}
 
-Siami-Namini \& Namin (2018) undersöker i en studie huruvida RMSE skiljer sig mellan LSTM och ARIMA på ett flertal världsindex, däribland DJI och Nikkei 225, och finner bevis för att LSTM överträffar ARIMA i förmågan att reducera av prediktionsfel. Qiu, Song och Akagi (2016) finner likt Siami-Namini \& Namin (2018), att ANN med födel kan användas för att prediktera framtida avkastning på Nikkei 225. 
+Namin \& Namin \parencite*{siaminamini2018forecasting} undersöker i en studie huruvida RMSE skiljer sig mellan LSTM och ARIMA på ett flertal världsindex, däribland DJI och Nikkei 225, och finner bevis för att LSTM överträffar ARIMA i förmågan att reducera av prediktionsfel. Qiu \& Song \parencite*{10.1371/journal.pone.0155133} finner likt Namin \& Namin \parencite*{siaminamini2018forecasting}, att ANN med födel kan användas för att prediktera framtida avkastning på Nikkei 225. 
 
-Jeong \& Lee (2019) applicerade en tangentfunkton i ARMA-komponenten och fann bevis för att en modifierad icke-linjär ARMA-GARCH modell med liknande egenskaper som en RNN predikterar framtida avkastningen på S\&P500 bättre än en ordinär ARMA-GARCH med linjära egenskaper. Detta är i linje med Sun, Xiao et al. (2019). Sang, Di Pierro (2018) applicerade LSTM och fann bevis att en trading-strategi baserad på ANN generarar högre avkastning klassisk teknisk analys. 
+Jeong \& Lee \parencite*{jeong2019recurrent} applicerade en tangentfunkton i ARMA-komponenten och fann bevis för att en modifierad icke-linjär ARMA-GARCH modell med liknande egenskaper som en RNN predikterar framtida avkastningen på S\&P500 bättre än en ordinär ARMA-GARCH med linjära egenskaper. Detta är i linje med Long, Lu och Ciu \parencite*{long2019deep}. Sang \& Di Pierro \parencite*{sang2019improving} applicerade LSTM och fann bevis att en trading-strategi baserad på ANN generarar högre avkastning klassisk teknisk analys. 
 
 Gemensamt för de flesta studier utifrån svenska index är att de jämfört djurinlärningsalgoritmer med ARIMA, denna studie berör ARMA-GARCH på ett småbolagsindex med kortare prediktionsperioder och empiriska valideringsmetoder. Det finns ett flertal studier som berör storbolagsindex för ett enskilt land eller ett världsindex. Empiriska studier utifrån svenska index, synnerligen småbolagsindex som är mer volatilt, är mer sällsynt vilket vi i denna studie vill bidra med. 
 
@@ -164,7 +164,7 @@ Uppsatsen är begränsad till att enbart beröra small-cap index på Stockholmsb
 %%%%%%%%%%%%%% TEORI %%%%%%%%%%%%%%%
 \section{Finansiell teori}
 \subsection{Hypotesen om effektiva marknader (EMH)}
-Den effektiva marknadshypotesen, även känd som EMH, är en term som definerades första gången av Harry Roberts (1967) och utvecklades några år senare av Eugene Fama (1970) \parencite{EMHhistory} i artikeln \emph{"Efficent Capital Markets: A Review of Theory and Empirical Work"}. 
+Den effektiva marknadshypotesen, även känd som EMH, är en term som definerades första gången av Harry Roberts (1967) och utvecklades några år senare av Eugene Fama \parencite*{Fama1970} i artikeln \emph{"Efficent Capital Markets: A Review of Theory and Empirical Work"}. 
 
 EMH är starkt förknippat med slumpvandring s.k. \emph{Random Walk}, som karakteriseras av en prisserie där alla efterföljande prisförändringar är slumpmässiga avvikelser från sin tidigare prisnivå. Om investerare har obehindrad tillgång till information och detta återspeglas direkt i prisnivån kommer morgondagens prisförändringar vara oberoende av dagens prisförändringar \parencite{EMH}. Vidare kan EMH delas upp i tre olika definitioner av marknadseffiktivitet: \emph{Svag form}, \emph{halvsvag form} och \emph{stark form} \parencite{Fama1970}. \emph{Svag form} betyder att framtida priser omöjligt kan predikteras genom att analysera historisk data. \emph{Halvstark form} är en mer restriktiv variant som inkluderas av att all offentlig information redan reflekterats i priserna. \emph{Stark form} som är den mest restriktiva innebär att prisnivån återspeglar all information som finns tillgänglig.
 
@@ -298,7 +298,7 @@ Data på dagliga stängningspriser är hämtat från Refinitiv Eikon och täcker
 I Figur -.- syns den logaritmerade avkastningsserien, perioder med hög volatilitet kännetecknas av aggressiva prisförändringar i avkastningsserien under en given period.
 
 \begin{figure}[H]
-\caption{Logaritmerade avkastningsserie över perioden}
+\caption{Logaritmerad avkastningsserie över perioden}
 \includegraphics[width=\linewidth]{logplot.png}
 \centering
 \end{figure}
