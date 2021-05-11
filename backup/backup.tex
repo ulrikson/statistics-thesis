@@ -110,12 +110,9 @@ Handledare: Ulf Högnäs\\
 \newpage
 \thispagestyle{empty}
 \section*{Sammanfattning}
+I denna studie jämförs en LSTM-modell (Long Short-Term Memory) med en ARMA-GARCH-modell på ett svenskt småbolagsindex. Modellerna korsvalideras över 1000 skattningar. Resultatet visar att ARMA-GARCH i genomsnitt är mer exakt och genererar högre avkastning än LSTM. Mäts prestation i prediktionsfel är modellerna dock oskiljbara. Studien visar även att ARMA-GARCH (men inte LSTM) kan användas för att skapa en algoritmisk handelsstrategi som ger högre avkastning än indexet.
 
-I denna studie appliceras en LSTM (long short-term memory) på prisdata från OMX small-cap index som jämförs med den konventionella tidsseriemodellen ARIMA(1,1)-GARCH(1,1). Det visar sig att LSTM överträffar en ARMA(1,1) med GARCH(1,1) komponent på en periods sikt medan ARMA(1,1)-GARCH(1,1) ger mer exakta skattningar på 5, 21 och 63 dagars sikt. Vid simulerad handling över 1.000 perioder är ARMA(1,1)-GARCH(1,1) att föredra oavsett antal tidsperioder fram i tiden. Studien antyder att en ARMA(1,1)-GARCH(1,1) med fördel kan användas för att applicera en algoritmisk handelsstrategi som överpresterar index under den studerade perioden. 
-
-\section*{Abstract}
-In this study, an LSTM (long-term memory) is applied to price data from the OMX small-cap index as queries with the conventional time series model ARIMA (1,1)-GARCH (1,1). It turns out that LSTM outperforms an ARMA (1,1) with GARCH (1,1) component in one step ahead forecast while ARMA (1,1)-GARCH (1,1) gives more accurate estimates of 5, 21 and 63 days ahead. For simulated trading over 1.000 periods, ARMA (1,1)-GARCH (1,1) is preferred regardless of the number of time periods forecasted. The study suggests that an ARMA (1,1)-GARCH (1,1) can be used to apply an algorithmic trading strategy as it overperforms index during the period studied.
-
+%I denna studie appliceras en LSTM (long short-term memory) på prisdata från OMX small-cap index som jämförs med den konventionella tidsseriemodellen ARIMA(1,1)-GARCH(1,1). Det visar sig att LSTM överträffar en ARMA(1,1) med GARCH(1,1) komponent på en periods sikt medan ARMA(1,1)-GARCH(1,1) ger mer exakta skattningar på 5, 21 och 63 dagars sikt. Vid simulerad handling över 1.000 perioder är ARMA(1,1)-GARCH(1,1) att föredra oavsett antal tidsperioder fram i tiden. Studien antyder att en ARMA(1,1)-GARCH(1,1) med fördel kan användas för att applicera en algoritmisk handelsstrategi som överpresterar index under den studerade perioden. 
 
 %%%%%%%%%%%% TABLE OF CONTENTS %%%%%%%%%%%%%%%%%
 \newpage
@@ -157,6 +154,7 @@ In this study, an LSTM (long-term memory) is applied to price data from the OMX 
     \item är det tydligt att t i tabellerna syftar till antal perioder framåt?
     \item vi ändrade ju kring precison, käsnlighet \& F-värde. var uppmärksam på om gamla resonemang mot förmodan ligger kvar
     \item tänk extra på att vi inte ska få det att låta som att vi testat LSTM mot ALLA ekonometriska modeller
+    \item Kolla igenom F2, tips från Uffe
     
     % Språkligt
     \item tempus (introduktion + teori = nutid, metod = nutid, resultat = nutid,  diskussion + slutsats = dåtid
@@ -196,11 +194,15 @@ Uppsatsen är begränsad till att enbart beröra småbolagsindex på Stockholmsb
 
 En av de mest omfattande studierna kring användandet av neurala nätverk i jämförelse med ekonometriska modeller genomfördes av Paliwal och Kumar \parencite*{paliwal2009neural}. I en metaanalys summerar de resultat från 96 studier inom olika områden och finner att neurala nätverk presterar lika bra och i många fall bättre än ekonometriska modeller. Det påpekas å andra sidan att en anledning till detta resultat kan bero på ouppfyllda antaganden kring de ekonometriska modellerna. 
 
-I en annan studie som genomfördes av Namin \& Namin \parencite*{siaminamini2018forecasting} undersöker de hur väl LSTM och ARIMA predicerar ett flertal världsindex genom att jämföra spridningen av avvikelser i prediktionerna, och finner bevis för att LSTM överträffar ARIMA vad gäller förmågan att reducera prediktionsfel sett till storleken på RMSE. Qiu \& Song \parencite*{10.1371/journal.pone.0155133} finner likt Namin \& Namin \parencite*{siaminamini2018forecasting} att ett Artificellt Neuralt Nätverk (ANN) med fördel kan användas för att predicera framtida avkastning. Bollerslev (1986) presenterade GARCH som är en generaliserad variant av ARCH som presenterats bara några år innan av Engle (1982). Denna vidareutvecklade modell har visat sig 
+I en annan studie som genomfördes av Namin \& Namin \parencite*{siaminamini2018forecasting} undersöker de hur väl LSTM och ARIMA predicerar ett flertal världsindex genom att jämföra spridningen av avvikelser i prediktionerna, och finner bevis för att LSTM överträffar ARIMA vad gäller förmågan att reducera prediktionsfel sett till storleken på RMSE. Qiu \& Song \parencite*{10.1371/journal.pone.0155133} finner likt Namin \& Namin \parencite*{siaminamini2018forecasting} att ett Artificellt Neuralt Nätverk (ANN) med fördel kan användas för att predicera framtida avkastning. Bollerslev (1986) presenterade GARCH som är en generaliserad variant av ARCH som presenterats bara några år innan av Engle (1982). Denna vidareutvecklade modell har visat sig med fördel kunna implementeras för att predicera finansiella tidsserier \parencite{garch}. Gemensamt för de flesta studier som jämför ekonometriska modeller med djupinlärningsmodeller är att de jämför ARIMA med LSTM. Detta trots att GARCH-modeller visat sig framgångsrika på finansiella tidsserier. 
+
+I denna studie används ARMA-GARCH på ett småbolagsindex med kortare prediktionsperioder och andra empiriska valideringsmetoder. Det finns ett flertal studier som berör storbolagsindex för ett enskilt land eller ett världsindex. Empiriska studier som jämför artificella nätverk gentemot en kombination av ARIMA och GARCH på svenska börsindex, synnerligen småbolagsindex, är mer sällsynt vilket denna studie vill bidra med. 
 
 %I en annan intressant studie som utfördes Jeong \& Lee \parencite*{jeong2019recurrent} applicerades en tangentfunkton i ARMA-komponenten och utifrån denna metod fann de bevis för att en modifierad icke-linjär ARMA-GARCH modell med liknande egenskaper som Recurrent Neural Network (RNN), predicerar framtida avkastning på S\&P500 mer precist än en ARMA-GARCH med linjära egenskaper. Detta är i linje med Long, Lu och Ciu \parencite*{long2019deep} och ges ytterliggare stöd av Sang \& Di Pierro \parencite*{sang2019improving} där de i en studie applicerar LSTM och visar på att utförandet av en trading-strategi baserat på ANN med fördel kan användas vid prediktion av finansiella tidsserier. 
 
-Gemensamt för de flesta studier är att de jämför djupinlärningsmodeller med ARIMA, denna studie berör ARMA-GARCH på ett småbolagsindex med kortare prediktionsperioder och andra empiriska valideringsmetoder. Det finns ett flertal studier som berör storbolagsindex för ett enskilt land eller ett världsindex. Empiriska studier som jämför artificella nätverk gentemot en kombination av ARIMA och GARCH på svenska börsindex, synnerligen småbolagsindex, är mer sällsynt vilket denna studie vill bidra med. 
+
+
+
 
  
 
@@ -403,14 +405,14 @@ Känslighet ger svar på frågan 'Hur stor andel av de predicerade uppgångarna 
 $F_{\beta}$-värdet är ett mått på exakthet där ett positivt värde ges till faktorn $\beta$ för att värdera antingen precision eller känslighet högst, detta värde defineras som
 
 \begin{equation}
-    F_{\beta} = \frac{(\beta^2+1) \textit{Precision} * 
-    \textit{Känslighet}}{\beta^2  \textit{Precision} + \textit{Känslighet}}
+    F_{\beta} = \frac{(\beta^2+1) \cdot \textit{Precision} \cdot 
+    \textit{Känslighet}}{\beta^2 \cdot \textit{Precision} + \textit{Känslighet}}
 \end{equation}
 
 För att ge ett balanserat mått viktas precision och känslighet lika med $\beta=1$ \parencite{ModelValidation}. Ett harmoniskt medelvärde mellan de två måttes fås då enligt
 
 \begin{equation}
-    \textit{F1} = 2 \Big( \frac{\textit{Precision} * \textit{Känslighet}}{\textit{Precision} + \textit{Känslighet}} \Big)
+    \textit{F1} = 2 \cdot \Big( \frac{\textit{Precision} \cdot \textit{Känslighet}}{\textit{Precision} + \textit{Känslighet}} \Big)
 \end{equation}
 
 Där $F1=1$ är det högsta värdet som indikerar optimal precision och känslighet, medan $F1=0$ är det lägsta värdet och indikerar att precision eller känslighet är noll.
@@ -445,7 +447,7 @@ Teststatistikan är:
 \begin{equation}
     z = \frac{\Bar{a}_{i,t} - \Bar{b}_{i,t} - 0}{\sqrt{\frac{s_{a,i,t}^2}{n_a}+\frac{s_{b,i,t}^2}{n_b}}} \sim N(0,1)
 \end{equation}
-Som sedan jämförs med det kritiska värdet 1,64 för ett ensidigt test på 5\% signifikansnivå.
+Som sedan jämförs med det kritiska värdet 1,64 för ett ensidigt test på 5 procent signifikansnivå.
 
 
 \subsubsection{Handelsstrategi}
@@ -454,7 +456,7 @@ För att undersöka hur väl modellerna presterar när de appliceras för att ha
 \begin{itemize}
     \item Lång strategi: Strategin baseras på att automatiskt öppna en lång position (lägga en köporder) när modellen predicerar att prisnivån $t$ dagar fram kommer att vara högre än vid tidpunkten då prediktionen görs ($t=0$). Med andra ord görs ett köp om $P_t > P_0$.
     \item Kort strategi: Gå kort (lägga en säljorder) när modellen predicerar att prisnivån $t$ dagar fram kommer att vara lägre än tidpunkten då prediktionen görs ($t=0$). Med andra ord görs ett sälj om $P_t < P_0$.
-    \item Behållstrategi: Behålla (varken köpa eller sälja) om det predicerade priset är identiskt med priset då prediktionen görs, dvs. $P_t = P_0$, eller om den föreslagna ordern är identisk med ordern innan. Det senare eftersom det bara går att äga en enhet av indexet åt gången. Exempelvis blir två köpindikationer på rad således ett köp och ett håll.
+    \item Behållstrategi: Behålla (varken köpa eller sälja) om det predicerade priset är identiskt med priset då prediktionen görs, dvs. $P_t = P_0$, eller om den föreslagna ordern är identisk med ordern innan. Det senare eftersom det bara går att äga en enhet av indexet åt gången. Exempelvis blir två köpindikationer på rad således ett köp och ett behåll.
 \end{itemize}
 
 Modellerna jämförs i sin tur med en passiv strategi - att öppna en lång position i index och behålla den utan ytterliggare handlingar. Om LSTM och ARMA-GARCH lyckas spekulera rätt kring uppgångar och nedgångar om den framtida prisnivån kommer de i snitt generera högre avkastning än den passiva strategin. 
@@ -491,7 +493,6 @@ I Figur 4.2 syns den logaritmerade avkastningsserien där perioder med hög vola
 \end{figure}
 
 
-
 \begin{table}[H]
 \caption{Deskriptiv statistik över logaritmerad avkastning i OMXSSC}
 \begin{tabular}{@{}llllllllll@{}}
@@ -501,9 +502,6 @@ Index  & Min.    & Medelvärde & Max    & SD     & Skrevhet & Kurtosis \\ \cmidr
 OMXSSC & -0,0875 & 0,0056     & 0,0701 & 0,0006 & -1,4438  & 12,9149  \\ \cmidrule(r){1-7}
 \end{tabular}
 \end{table}
-
-
-
 
 
 
@@ -521,7 +519,7 @@ Där  $\hat{\theta_t}$ är predicerad logaritmerad avkastning för tidpunkt $t$ 
 % Denna känns lite mis placé 
 %Skevhetskoefficienten för avkastningsserien är negativ - fördelningen har en lång negativ svans med större frekvens av negativa avkastningar jämfört med positiva avkastningar. Kurtosiskoefficienten är större än tre och kännetecknas av en tjock svans (En: "\emph{fat tail}") där dagar med onormalt hög avkastning förekommer mer frekvent än hos en normalfördelning.
 
-Prediktioner görs $(t=1, 3, 5, 21, 63)$ dagar fram i tiden, där $t=1$ är en börsdag,  $t=3$ motsvarar en halv börsvecka, $t=5$ en hel börsvecka, $t=21$ en börsmånad och $t=63$ ett börskvartal. Vidare delas 75 procent av datamaterialet in i träningsdata som sträcker sig från 1 januari 2003 till 31 juli 2016. Resterande del av datamaterialet utgörs av testdata som sträcker sig mellan den 3 augusti 2016 till den 14 febuari 2021. 
+Prediktioner görs t=\{1, 3, 5, 21, 63\} dagar fram i tiden, där $t=1$ motsvarar en börsdag,  $t=3$ en halv börsvecka, $t=5$ en hel börsvecka, $t=21$ en börsmånad och $t=63$ motsvarar ett börskvartal. Vidare delas 75 procent av datamaterialet in i träningsdata som sträcker sig från 1 januari 2003 till 31 juli 2016. Resterande del av datamaterialet utgörs av testdata som sträcker sig mellan den 3 augusti 2016 till den 14 febuari 2021. 
 
 \newpage
 %%%%%%%%%%%%%% RESULTAT %%%%%%%%%%%%%%%
@@ -538,9 +536,9 @@ Parameter  & Skattning & Standardfel & p-värde \\
 \hline
 
 $\delta$        & 0,0005  & 0,0002  & $0,0087$   \\
-$\phi_1$        & 0,6737  & 0,0670  & $<2,2*10^{-16}$   \\
+$\phi_1$        & 0,6737  & 0,0670  & $<2,2\cdot10^{-16}$   \\
 
-$\theta_1$      & -0,5574 & 0,0754  &  $1,42*10^{-13}$   \\
+$\theta_1$      & -0,5574 & 0,0754  &  $1,4\cdot10^{-13}$   \\
 \midrule
 
 Informationskriterier  & &  &  \\
@@ -552,11 +550,11 @@ AIC                   & -22.708,91 \\
 BIC                   & -22.683,36 \\
 \bottomrule
 \end{tabularx}
-\footnotesize{Notera att samtliga parametrar är signifikant skilda från 0 på 5\% nivå.}
+\footnotesize{Notera att samtliga parametrar är signifikant skilda från 0 på 5 procent nivå.}
 \end{table}
 
 
-Eftersom det finns tydliga tecken på heteroskedasticitet och ingen differentiering behövs appliceras ARMA-GARCH. AIC och BIC visar att ARMA(1,1)-GARCH(1,1) är den bästa möjliga modellen utifrån datan (se bilaga G för alla modeller som utvärderas). Nedan följer en sammanställning över denna och i bilaga F finns prediktioner baserat på modellen, inklusive konfidentsintervall, illustrerade. Samtliga parametrar är signifikant skilda från 0 på 5\% signifikansnivå.
+Eftersom det finns tydliga tecken på heteroskedasticitet och ingen differentiering behövs appliceras ARMA-GARCH. AIC och BIC visar att ARMA(1,1)-GARCH(1,1) är den bästa möjliga modellen utifrån datan (se bilaga G för alla modeller som utvärderas). Nedan följer en sammanställning över denna och i bilaga F finns prediktioner baserat på modellen, inklusive konfidentsintervall, illustrerade. Samtliga parametrar är signifikant skilda från 0 på 5 procent signifikansnivå.
 
 \begin{table}[H]
 \caption{Sammanfattning av ARMA(1,1)-GARCH(1,1)}
@@ -565,14 +563,14 @@ Eftersom det finns tydliga tecken på heteroskedasticitet och ingen differentier
 Parameter  & Skattning & Standardfel & p-värde \\
 \hline
 
-$\delta$      & 0,0002         & $6,12*10^{-5}$ & 0,0012           \\
-$\phi_1$      & 0,7707         & 0,0492         & $<2*10^{-16}$    \\
+$\delta$      & 0,0002         & $6,1\cdot10^{-5}$ & 0,0012           \\
+$\phi_1$      & 0,7707         & 0,0492         & $<\cdot10^{-16}$    \\
 
-$\theta_1$    & -0,6484        & 0,0593         & $<2*10^{-16}$    \\
-$w$           & $4,16*10^{-6}$ & $5,66*10^{-7}$ & $1,89*10^{-13}$  \\
+$\theta_1$    & -0,6484        & 0,0593         & $<2\cdot10^{-16}$    \\
+$w$           & $4,16*10^{-6}$ & $5,66*10^{-7}$ & $1,89\cdot10^{-13}$  \\
 
-$\alpha_1$    & 0,1716         & 0,0154         & $<2*10^{-16}$    \\
-$\beta_1$     & 0,7721         & 0,0180         & $<2*10^{-16}$    \\ 
+$\alpha_1$    & 0,1716         & 0,0154         & $<2\cdot10^{-16}$    \\
+$\beta_1$     & 0,7721         & 0,0180         & $<2\cdot10^{-16}$    \\ 
 \midrule
 
 Informationskriterier  & &  &  \\
@@ -584,6 +582,7 @@ AIC            & -6,9652        &                &                   \\
 BIC            & -6,9544         &                &                   \\
 \bottomrule
 \end{tabularx}
+\footnotesize{Notera att samtliga parametrar är signifikant skilda från 0 på 5 procent nivå.}
 \end{table}
 
 
@@ -606,20 +605,21 @@ I Tabell 5.3 sammanfattas resultaten av RMSE och MAPE för LSTM och ARMA-GARCH v
  & \multicolumn{2}{c}{ARMA-GARCH}\\
 
 \cmidrule(lr){2-3} \cmidrule(l){4-5}
-$t$  & \emph{RMSE} & \emph{MAPE} & \emph{RMSE} & \emph{MAPE} \\
+$t ^\dagger$  & \emph{RMSE} & \emph{MAPE(\%)} & \emph{RMSE} & \emph{MAPE(\%)} \\
 
 \midrule
 
-1  &  1,18    &  0,19\%   &   0,02  & 0,00\% \\
-3  &  4,05    & 0,51\%    &  7,52   & 0,71\% \\
+1  &  1,18    &  0,19   &   0,02  & 0,00 \\
+3  &  4,05    & 0,51    &  7,52   & 0,71 \\
 
-5  &  4,32    & 0,39\%    &  9,85   & 0,71\% \\
-21 &  20,97   &  0,89\%   &  2,32   & 0,54\% \\
+5  &  4,32    & 0,39    &  9,85   & 0,71 \\
+21 &  20,97   &  0,89   &  2,32   & 0,54 \\
 
-63 &  150,21  & 2,93\%    &  43,55  & 1,06\% \\
+63 &  150,21  & 2,93    &  43,55  & 1,06 \\
 
 \bottomrule
 \end{tabularx}
+\footnotesize{$^\dagger$ Antal börsdagar som prediceras}
 \end{table}
 
 
@@ -643,23 +643,24 @@ RMSE och MAPE korsvalidera även över 1.000 perioder. Medelvärden av måtten p
  & \multicolumn{2}{c}{ARMA-GARCH}\\
 
 \cmidrule(lr){2-3} \cmidrule(l){4-5}
-$t$  & \emph{RMSE} & \emph{MAPE} & \emph{RMSE} & \emph{MAPE} \\
+$t ^\dagger$  & \emph{RMSE} & \emph{MAPE(\%)} & \emph{RMSE} & \emph{MAPE(\%)} \\
 
 \midrule
 
-1  & 4,97    &  0,61\%   & 4,91    & 0,61\% \\
-3  &  12,16  & 0,91\%    &  11,90  & 0,91\% \\
+1  & 4,97    &  0,61   & 4,91    & 0,61 \\
+3  &  12,16  & 0,91    &  11,90  & 0,91 \\
 
-5  &  19,82  & 1,19\%    &  19,18  &  1,16\% \\
-21 & 92,26   &  2,75\%   & 85,88   & 2,57\% \\
+5  &  19,82  & 1,19    &  19,18  &  1,16 \\
+21 & 92,26   &  2,75   & 85,88   & 2,57 \\
 
-63 &  322,02 & 5,40\%    &  294,07 & 5,02\% \\
+63 &  322,02 & 5,40    &  294,07 & 5,02 \\
 
 \bottomrule
 \end{tabularx}
+\footnotesize{$^\dagger$ Antal börsdagar som prediceras}
 \end{table}
 
-Ingen av måtten är signifikant bättre än det andra i någon av de utforskade perioderna.
+Ingen av måtten är i snitt signifikant bättre än det andra i någon av de utforskade perioderna.
 
 \subsection{Precision, Känslighet och F-värde}
 Nedan ges en sammanfattning över känsligheten, precisionen och F-värdet för de bägge modellerna för varje period vid en enskild skattning.
@@ -675,7 +676,7 @@ Nedan ges en sammanfattning över känsligheten, precisionen och F-värdet för 
  & \multicolumn{2}{c}{F-värde}\\
 
 \cmidrule(lr){2-3} \cmidrule(l){4-5} \cmidrule(l){6-7}
-$t$  & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH} \\
+$t ^\dagger$  & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH} \\
 
 \midrule
 
@@ -689,6 +690,7 @@ $t$  & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH} & \emph
 
 \bottomrule
 \end{tabularx}
+\footnotesize{$^\dagger$ Antal börsdagar som prediceras}
 \end{table}
 
 Modellerna ger identiska resultat. Att känsligheten är 1 för bägge modellerna är inte konstigt. De identifierar en stigande trend så andelen stigande prediktioner som är korrekta blir därför hög (se bilaga F). LSTM har en nedgång vid ungefär 30 perioder, men samtidigt sjunker index, vilket är varför den nedgången inte påverkar känsligheten. 
@@ -706,7 +708,7 @@ För att säkerställa att resultaten ovan inte enbart är en effekt av den vald
  & \multicolumn{2}{c}{F-värde}\\
 
 \cmidrule(lr){2-3} \cmidrule(l){4-5} \cmidrule(l){6-7}
-$t$  & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH}  \\
+$t^\dagger$  & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH}  \\
 
 \midrule
 
@@ -720,17 +722,18 @@ $t$  & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH} & \emph
 
 \bottomrule
 \end{tabularx}
-\footnotesize{* $p<0.05$ med alternativhypotesen att ARMA-GARCH är högre än LSTM}
+\footnotesize{* $p<0.05$ medelvärdestest med alternativhypotesen att ARMA-GARCH är högre än LSTM} \\
+\footnotesize{$^\dagger$ Antal börsdagar som prediceras}
 \end{table}
 
-ARMA-GARCH är statistiskt signifikant bättre gällande samtliga mått oavsett hur långa prediktioner som görs. Att värdena på precision och känslighet är identiska vid en periods prediktion beror på att testen testar samma sak då. Antingen är det en sann stigande och då ger bägge måtten 1 eller är det inte sant stigande och då returnerar båda måtten 0 (se ekvation 3.16 och 3.17).
+ARMA-GARCH är i snitt statistiskt signifikant bättre gällande samtliga mått oavsett hur långa prediktioner som görs. Att värdena på precision och känslighet är identiska vid en periods prediktion beror på att testen testar samma sak då. Antingen är det en sann stigande och då ger bägge måtten 1 eller är det inte sant stigande och då returnerar båda måtten 0 (se ekvation 3.16 och 3.17).
 
 
 \subsection{Utvärdering av handelsstrategi}
-För utvärdering av handelsstrategin jämförs hur stor procentuell avkastning modellerna genererat under varje givet tidsintervall. I Tabell 5.7 presenteras den procentuella avkastningen av att handla med respektive strategi samt hur många ordrar algoritmen gör under de 1.000 perioderna. För att kunna utvärdera strategierna används den passiva investeringsstrategin som riktmärke - en strategi som genererat 61,9\% avkastning över perioden.
+För utvärdering av handelsstrategin jämförs hur stor procentuell avkastning modellerna genererat under varje givet tidsintervall. I Tabell 5.7 presenteras den procentuella avkastningen av att handla med respektive strategi samt hur många ordrar algoritmen gör under de 1.000 perioderna. För att kunna utvärdera strategierna används den passiva investeringsstrategin som riktmärke - en strategi som genererat 61,9 procent avkastning över perioden.
 
 \begin{table}[H]
-\caption{Avkastning efter handel över 1.000 perioder$^\dagger$}
+\caption{Avkastning efter handel över 1.000 perioder$^\ddagger$}
 \begin{tabularx}{\textwidth}{c *{6}{Y}}
 \toprule
 
@@ -738,21 +741,22 @@ För utvärdering av handelsstrategin jämförs hur stor procentuell avkastning 
  & \multicolumn{2}{c}{ARMA-GARCH}\\
 
 \cmidrule(lr){2-3} \cmidrule(l){4-5}
-$t$  & \emph{Avkastning} & \emph{Antal ordrar} & \emph{Avkastning} & \emph{Antal ordrar} \\
+$t^\dagger$  & \emph{Avkastning(\%)} & \emph{Antal ordrar} & \emph{Avkastning(\%)} & \emph{Antal ordrar} \\
 
 \midrule
 
-1  &  12,53\%    &  51   & 117,9\%    & 78 \\
-3  &  -0,42\%   & 87    &  117,05\% & 62 \\
+1  &  12,53    &  51   & 117,9    & 78 \\
+3  &  -0,42   & 87    &  117,05 & 62 \\
 
-5  &  7,69\%   & 121   &  112,64\%  &  54 \\
-21 & 8,26\%    &  137   & 92,27\%   & 5 \\
+5  &  7,69   & 121   &  112,64  &  54 \\
+21 & 8,26    &  137   & 92,27   & 5 \\
 
-63 &  8,26\%   & 188   &  59,20\% & 2 \\
+63 &  8,26   & 188   &  59,20 & 2 \\
 
 \bottomrule
 \end{tabularx}
-\footnotesize{$^\dagger$ Under perioden 2016-08-03 - 2020-07-25. En passiv strategi genererade en totalavkatning på 61,90\% under samma period.}\\
+\footnotesize{$^\ddagger$ Under perioden 2016-08-03 - 2020-07-25. En passiv strategi genererade en totalavkastning på 61,90 procent under samma period.}\\
+\footnotesize{$^\dagger$ Antal börsdagar som prediceras}
 \end{table}
 
 
@@ -777,7 +781,7 @@ Rörande prediktionsfel, mätt med RMSE och MAPE, visade analysen att ingen av m
 
 
 
-Den binära klassificeringen av prisupp - och nedgångar utgjordes av känslighet, precision och F-värde. Oavsett vilket av måtten som används eller hur långa prediktioner som görs presterar ARMA-GARCH bättre. Väl värt att notera är att LSTM inte är bättre än att slumpmässigt gissa (50\% rätt) avseende precision eller känslighet. På 1, 3 och 5 dagars sikt är inte ARMA-GARCH heller det, men på 21 och 63 perioders sikt ger ARMA-GARCH mer än 50\% rätt på både precision och känslighet. Detta visar på att även om genomsnittliga felet är stort (RMSE och MAPE) på längre perioder så är modellen åtminstone bra på att identifiera huruvida priset kommer att ha gå upp. Den övergripande slutsatsen av den binära klassificering är alltså att ARMA-GARCH är bättre än LSTM. 
+Den binära klassificeringen av prisupp- och nedgångar utgjordes av känslighet, precision och F-värde. Oavsett vilket av måtten som används eller hur långa prediktioner som görs presterar ARMA-GARCH i genomsnitt bättre. Väl värt att notera är att LSTM inte är bättre än att slumpmässigt gissa (50 procent rätt) avseende precision eller känslighet. På 1, 3 och 5 dagars sikt är inte ARMA-GARCH heller det, men på 21 och 63 perioders sikt ger ARMA-GARCH mer än 50 procent rätt på både precision och känslighet. Detta visar på att även om genomsnittliga felet är stort (RMSE och MAPE) på längre perioder så är modellen åtminstone bra på att identifiera huruvida priset kommer att ha gå upp. 
 
 Resultaten från den sista valideringstypen, simulerad handling över 1.000 perioder, visade entydigt i att ARMA-GARCH var att föredra oavsett hur långt in i framtiden det förutspås. Det var även tydligt, och föga förvånande, att kortsiktiga prediktioner var mer lönsamma än långsiktiga. ARMA-GARCH var även bättre än den passiva strategin upp till 21 perioders prediktion medan LSTM var sämre oavsett prediktionsperiod. Som tidigare diskuterades kan den passiva strategin liknas vid en slumpvandring, och givet att EMH rådde ska det därför inte ha gått att finna en modell som var bättre än den denna. Men eftersom ARMA-GARCH visade sig generera högre avkastning än den passiva strategin kan EMH alltså förkastas under den studerade perioden. En ARMA-GARCH kan alltså användas för att applicera en algoritmisk handelsstrategi som utpresterar index under den valda perioden. 
 
@@ -791,7 +795,7 @@ Tabell 6.1 illustrerar samtliga slutsatser som nås i diskussionen ovan.
 
 \begin{tabularx}{\textwidth}{c *{6}{Y}}
 \toprule
-$t$  & Prediktionsfel & Exakthet & Avkastning \\
+$t ^\dagger$  & Prediktionsfel & Exakthet & Avkastning \\
 \hline
 
 1      & Oskiljbara          & ARMA-GARCH                 & ARMA-GARCH          \\
@@ -802,10 +806,11 @@ $t$  & Prediktionsfel & Exakthet & Avkastning \\
 21     &  Oskiljbara         & ARMA-GARCH         & ARMA-GARCH   \\
 
 
-64     & Oskiljbara         & ARMA-GARCH         & ARMA-GARCH    \\ 
+63     & Oskiljbara         & ARMA-GARCH         & ARMA-GARCH    \\ 
 
 \bottomrule
 \end{tabularx}
+\footnotesize{$^\dagger$ Antal börsdagar som prediceras}
 \end{table}
 
 När resultatet sätts i förhållande till tidigare studier nås flera intressanta insikter. Flera tidigare studier nådde samstämmigt slutsatsen att LSTM var åtminstone lika bra och ofta bättre än ARIMA. Att denna studie visat andra resultat kan tänkas bero på tre olika faktorer. För det första har ett flertal tidigare studier applicerat ARIMA utan GARCH-komponent för att jämföra LSTM med. Som diskuterades tidigare och som påvisades i denna studie, är antagandet om homoskedasticitet sällan uppfyllt inom finansiell analys. Att använda en ARIMA-modell utan GARCH-komponent är således suboptimalt. En andra faktor som kan ha påverkat var specifikationen av LSTM-modellen. Denna studie valde att låta modellen använda en lagg, eftersom det var jämförbart med vad som var bästa möjliga ARMA-GARCH. Hade fler laggar valts kan det i teorin ha gett ett bättre resultat. Dock ökar risken för en överanpassning av data markant -  modellen anpassas för nära till den befintliga datan vilket i sin tur hämmar dess möjlighet att förutspå utanför det befintliga urvalet. I denna uppsats valdes en specifikation baserat på teori snarare än empiri, vilket med fördel kan minska risken för överanpassning men kan å andra sidan ha gjort resultaten mindre fördelaktiga för LSTM-modellen. Den tredje faktorn är att det i denna studie har säkerställts att samtliga ARMA-GARCHs antaganden är uppfyllda. Detta har visat sig inte alltid vara fallet i andra studier \parencite{paliwal2009neural}. 
@@ -819,7 +824,7 @@ Den första är estimaten av parametrar i modellerna i såväl ARMA-GARCH som LS
 
 Den andra är valet av modell. Alla modeller kommer alltid att vara en förenkling av verkligheten, vilket i sig leder till fel, men olika modeller kan ge mer eller mindre fel. Exempelvis finns det andra typer av GARCH-modeller att tillgå, däribland exponentiell GARCH (EGARCH) som används inom finansiell analys \parencite{nelson1991conditional}. ARMA-komponenten hade också kunnat bytas ut mot ARFIMA (Autoregressive Fractionally Integrated Moving Average), som visat sig effektiva när tidsserier behöver ha ett långt minne, precis som LSTM \parencite{taqqu1995estimators}. Angående LSTM hade det varit möjligt att använda en mer simpel modell. Neurala nätverk, som LSTM är en underkategori till, används frekvent inom området \parencite[se t.ex.][]{rather2015recurrent, li2010applications}. Det finns även andra typer av LSTM, såsom 'Deep LSTM' med flera lager av neuroner \parencite[se applikation i][]{hansson2017stock}. Vidare baserades valet av modell i samtliga perioder av korsvalideringen på vilken modell som var bäst vid sista träningsperioden. Andra resultat hade möjligen kunnat nås om modellen vid varje enskild tidpunkt modellerades om och parametrarna optimerades utifrån den nya datapunkten som tillförts. Det är inte heller säkert, även om det är troligt, att alla modellantaganden uppfylls i alla av de 1.000 perioderna vilket kan påverkat hur väl ARMA-GARCH presterat. 
 
-Slutligen gäller inte nödvändigtvis förutsättningarna som var när datan insamlades in i framtiden. Ett extremt exempel på denna felkälla är Bitcoin. I maj 2016 var en Bitcoin värd ungefär 450 USD, fem år senare, när denna uppsats skriv i maj 2021, är en Bitcoin värd ungefär 64.000 USD. En ökning med över 14.000\% \parencite{yahoo_bitcoin}. Det förefaller osannolikt att en modell som var bra innan ökningen fortfarande håller måttet. Poängen är alltså att framtida applikationer av de modeller som använts i denna studie inte nödvändigtvis genererar samma resultat.
+Slutligen gäller inte nödvändigtvis förutsättningarna som var när datan insamlades in i framtiden. Ett extremt exempel på denna felkälla är Bitcoin. I maj 2016 var en Bitcoin värd ungefär 450 USD, fem år senare, när denna uppsats skriv i maj 2021, är en Bitcoin värd ungefär 64.000 USD. En ökning med över 14.000 procent \parencite{yahoo_bitcoin}. Det förefaller osannolikt att en modell som var bra innan ökningen fortfarande håller måttet. Poängen är alltså att framtida applikationer av de modeller som använts i denna studie inte nödvändigtvis genererar samma resultat.
 
 \newpage
 %%%%%%%%%%%%%%%%%%
@@ -861,7 +866,7 @@ Följande paket användes i Python version 3.8 respektive R version 4.0 för att
 
 \subsection{Indexbeståndsdelar 12 februari 2021}
 \begin{table}[H]
-\scalebox{0.62}{
+\scalebox{0.75}{
 \begin{tabular}{|l|l|l|l|}
 \hline
 Namn & Kortnamn & Namn & Kortnman \\ \hline
@@ -1024,7 +1029,7 @@ ARMA(2,2)-GARCH(2,2)           & -6,963         &  -6,946
 \end{tabularx}
 \end{table}
 
-\subsection{Histogram över logaritmerad avkastning}
+\subsection{Histogram över logaritmerad avkastning med KDE}
 \begin{figure}[H]
 \caption{Histogram logaritmerad avkastning}
 \includegraphics[width=\linewidth]{histogram.png}
