@@ -91,7 +91,7 @@
 \centering
 \vspace{5cm}
 
-{\large\bfseries Att prognosticera småbolagsindex: En jämförelse mellan LSTM och ARMA-GARCH\par}
+{\large\bfseries Prognosticering av småbolagsindex: En jämförelse mellan LSTM och ARMA-GARCH\par}
 	\vspace{0.5cm}
 
 % LSTM och ARMA-GARCH: En jämförelse på ett svenskt småbolagsindex / LSTM and ARMA-GARCH: A comparison on a Swedish Small Cap index.
@@ -190,7 +190,7 @@ Studien är begränsad till småbolagsindex på Stockholmsbörsen och slutsatser
 
 En av de mest omfattande studierna kring användandet av neurala nätverk i jämförelse med statistiska modeller genomfördes av Paliwal och Kumar \parencite*{paliwal2009neural}. I en metaanalys summerar de resultat från 96 studier inom olika områden, såsom finans, medicin och marknadsföring. De finner att neurala nätverk presterar lika bra och i många fall bättre än statistiska modeller. Det påpekas å andra sidan att en anledning till detta resultat kan bero på ouppfyllda antaganden kring de ekonometriska modellerna. 
 
-I en annan studie av Namin \& Namin \parencite*{siaminamini2018forecasting} undersöker de hur väl LSTM och ARIMA predicerar ett flertal världsindex genom att jämföra spridningen av avvikelser i prediktionerna, och finner bevis för att LSTM överträffar ARIMA vad gäller förmågan att reducera prediktionsfel sett till storleken på RMSE. Qiu \& Song \parencite*{10.1371/journal.pone.0155133} finner likt Namin \& Namin \parencite*{siaminamini2018forecasting} att ett Artificellt Neuralt Nätverk (ANN) kan användas för att predicera framtida avkastning. Engle (1982) utvecklade ARCH som blev den första modellen att ta hänsyn till egenskaperna för volatilitet i finansiella tidsserier. Några år senare utvecklades GARCH av Bollerslev (1986), som är en generaliserad variant av ARCH-modellen. GARCH har visat sig ha flera fördelar gentemot ARCH, framförallt kan den beskriva betingad volatilitet för finansiella avkastningsserier. \parencite{tsay}. Gemensamt för de flesta studier som jämför ekonometriska modeller med djupinlärningsmodeller är att de jämför ARIMA med LSTM, trots att GARCH-modeller visat sig framgångsrika på finansiella tidsserier \parencite{garch,tsay}.
+I en annan studie av Namin \& Namin \parencite*{siaminamini2018forecasting} undersöker de hur väl LSTM och ARIMA predicerar ett flertal världsindex genom att jämföra spridningen av avvikelser i prediktionerna, och finner bevis för att LSTM överträffar ARIMA vad gäller förmågan att reducera prediktionsfel sett till storleken på RMSE. Qiu \& Song \parencite*{10.1371/journal.pone.0155133} finner likt Namin \& Namin \parencite*{siaminamini2018forecasting} att ett Artificellt Neuralt Nätverk (ANN) kan användas för att predicera framtida avkastning. Engle (1982) utvecklade ARCH som blev den första modellen att ta hänsyn till egenskaperna för volatilitet i finansiella tidsserier. Några år senare utvecklades GARCH av Bollerslev (1986), som är en generaliserad variant av ARCH-modellen. GARCH har visat sig ha flera fördelar gentemot ARCH, framförallt kan den beskriva betingad volatilitet för finansiella avkastningsserier \parencite[][,s.131-132.]{tsay}. Gemensamt för de flesta studier som jämför ekonometriska modeller med djupinlärningsmodeller är att de jämför ARIMA med LSTM, trots att GARCH-modeller visat sig framgångsrika på finansiella tidsserier \parencite{garch}.
 
 I denna studie appliceras ARMA-GARCH på ett svenskt småbolagsindex med andra prediktionsperioder och empiriska valideringsmetoder. Det finns ett flertal studier som berör storbolagsindex för ett enskilt land eller ett världsindex. Empiriska studier som jämför artificella nätverk gentemot en hybrid mellan ARIMA och GARCH på svenska börsindex, synnerligen småbolagsindex, är mer sällsynt vilket denna studie vill bidra med. 
 
@@ -398,7 +398,7 @@ $F_{\beta}$-värdet är ett mått på exakthet där ett positivt värde ges till
 
 \begin{equation}
     F_{\beta} = \frac{(\beta^2+1) \cdot \textit{Precision} \cdot 
-    \textit{Känslighet}}{\beta^2 \cdot \textit{Precision} + \textit{Känslighet}}
+    \textit{Känslighet}}{(\beta^2 \cdot \textit{Precision}) + \textit{Känslighet}}
 \end{equation}
 
 För att ge ett balanserat mått viktas precision och känslighet lika med $\beta=1$ \parencite{ModelValidation}. Ett harmoniskt medelvärde mellan de två måttes fås då enligt
@@ -501,7 +501,7 @@ Eftersom logaritmerade priser är svårtolkade transformeras dessa om till prisn
     \text{Prisnivå} =  exp\Big({\sum\limits_{t=1}^n \hat{\theta_{t}}} + ln(\phi)\Big)
 \end{equation}
 
-Prediktioner görs $t=\{1, 3, 5, 21, 63\}$ dagar fram i tiden, där $t=1$ motsvarar en börsdag,  $t=3$ en halv börsvecka, $t=5$ en hel börsvecka, $t=21$ en börsmånad och $t=63$ ett börskvartal. Vidare delas 75 procent av datamaterialet in i träningsdata som sträcker sig från 1 januari 2003 till 31 juli 2016. Resterande del av datamaterialet utgörs av testdata som sträcker sig mellan den 3 augusti 2016 till den 14 febuari 2021. 
+Prediktioner görs $t=\{1, 3, 5, 21, 63\}$ dagar fram i tiden, där $t=1$ motsvarar en börsdag,  $t=3$ en halv börsvecka, $t=5$ en hel börsvecka, $t=21$ en börsmånad och $t=63$ ett börskvartal. Vidare delas 75 procent av datamaterialet in i träningsdata som sträcker sig från 1 januari 2003 till 31 juli 2016. Resterande del av datamaterialet utgörs av testdata och sträcker sig mellan den 3 augusti 2016 till den 14 febuari 2021. 
 
 \newpage
 %%%%%%%%%%%%%% RESULTAT %%%%%%%%%%%%%%%

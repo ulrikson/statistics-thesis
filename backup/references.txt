@@ -1,0 +1,464 @@
+@online{smabalagsdefinition,
+    author    = "Nasdaq OMX",
+    title     = "Overview for OMXSSCPI",
+    url       = "https://indexes.nasdaqomx.com/Index/Overview/OMXSSCPI",
+    urldate={2021-03-01}
+}
+
+@online{trends_statistic,
+    author = "Google",
+    title = "Google trends statistics",
+    url = "https://trends.google.se/trends/explore?date=2010-01-01\%202019-12-31&q=statistics",
+    urldate={2021-04-12}
+}
+
+@online{yahoo_bitcoin,
+    author="{Yahoo Finance}",
+    title="BTC-USD",
+    url="https://yhoo.it/2SxddoT",
+    urldate={2021-05-01}
+}
+
+@article{nelson1991conditional,
+  title={Conditional heteroskedasticity in asset returns: A new approach},
+  author={Nelson, Daniel B},
+  journal={Econometrica: Journal of the Econometric Society},
+  pages={347--370},
+  year={1991},
+  publisher={JSTOR}
+}
+
+@book{hyndman2018forecasting,
+  title={Forecasting: principles and practice},
+  author={Hyndman, Rob J and Athanasopoulos, George},
+  year={2018},
+  publisher={OTexts}
+}
+
+@article{bergmeir2018note,
+  title={A note on the validity of cross-validation for evaluating autoregressive time series prediction},
+  author={Bergmeir, Christoph and Hyndman, Rob J and Koo, Bonsoo},
+  journal={Computational Statistics \& Data Analysis},
+  volume={120},
+  pages={70--83},
+  year={2018},
+  publisher={Elsevier}
+}
+
+@online{trends_ml,
+    author = "Google",
+    title = "Google trends machine learning",
+    url = "https://trends.google.se/trends/explore?date=2010-01-01\%202019-12-31&q=machine\%20learning",
+    urldate={2021-04-12}
+}
+
+@mastersthesis{andreasson2020forecasting,
+  title={Forecasting the OMXS30-a comparison between ARIMA and LSTM},
+  author={Andr{\'e}asson, David and Mortensen Blomquist, Jesper},
+  year={2020}
+}
+
+@mastersthesis{ferreira2019predicting,
+  title={Predicting the unpredictable-Can Artificial Neural Network replace ARIMA for prediction of the Swedish Stock Market (OMXS30)?},
+  author={Ferreira de Melo Filho, Alberto},
+  year={2019}
+}
+
+@book{purkait2019hands,
+  title={Hands-On Neural Networks with Keras: Design and create neural networks using deep learning and artificial intelligence principles},
+  author={Purkait, Niloy},
+  edition={1},
+  year={2019},
+  isbn={978-1789536089},
+  publisher={Packt Publishing Ltd}
+}
+
+@book{wooldridge2018introductory,
+  title={Introductory Econometrics: A Modern Approach},
+  edition={7},
+  isbn={978-1337558860},
+  author={Jeffrey M. Wooldridge},
+  year={2018},
+  publisher={Cengage Learning, Inc.}
+}
+
+@book{glantz2013multi,
+  title={Multi-asset risk modeling: techniques for a global economy in an electronic and algorithmic trading era},
+  author={Glantz, Morton and Kissell, Robert},
+  year={2013},
+  isbn={978-0124016941},
+  edition={1},
+  publisher={Academic Press}
+}
+
+@book{montgomery2015forecasting,
+  title={Introduction to time series analysis and forecasting},
+  edition={2},
+  author={Montgomery, Douglas C. and Jennings, Cheryl and Kulahci, Muhrat},
+  isbn={978-1118745113},
+  year={2015},
+  publisher={John Wiley \& Sons, Inc.}
+}
+
+@article{reimers2017optimal,
+  title={Optimal hyperparameters for deep lstm-networks for sequence labeling tasks},
+  author={Reimers, Nils and Gurevych, Iryna},
+  journal={arXiv preprint arXiv:1707.06799},
+  year={2017}
+}
+
+@article{engle1982autoregressive,
+  title={Autoregressive conditional heteroscedasticity with estimates of the variance of United Kingdom inflation},
+  author={Engle, Robert F},
+  journal={Econometrica: Journal of the econometric society},
+  pages={987--1007},
+  year={1982},
+  publisher={JSTOR}
+}
+
+@article{bollerslev1986generalized,
+  title={Generalized autoregressive conditional heteroskedasticity},
+  author={Bollerslev, Tim},
+  journal={Journal of econometrics},
+  volume={31},
+  number={3},
+  pages={307--327},
+  year={1986},
+  publisher={Elsevier}
+}
+
+@inproceedings{chen2011short,
+  title={Short-time traffic flow prediction with ARIMA-GARCH model},
+  author={Chen, Chenyi and Hu, Jianming and Meng, Qiang and Zhang, Yi},
+  booktitle={2011 IEEE Intelligent Vehicles Symposium (IV)},
+  pages={607--612},
+  year={2011},
+  organization={IEEE}
+}
+
+@article{yuan2019nonlinear,
+  title={Nonlinear dynamic soft sensor modeling with supervised long short-term memory network},
+  author={Yuan, Xiaofeng and Li, Lin and Wang, Yalin},
+  journal={IEEE transactions on industrial informatics},
+  volume={16},
+  number={5},
+  pages={3168--3176},
+  year={2019},
+  publisher={IEEE}
+}
+
+
+@online{Eikon,
+    author    = "Refinitiv",
+    title     = "We are Refinitiv",
+    url       = "https://www.refinitiv.com/en/about-us",
+    urldate={2021-02-02}
+}
+
+
+@misc{Metrics,
+    author    = "Helmut Luetkepohl, Fang Xu",
+    title     = "The Role of the Log Transformation in Forecasting Economic Variables",
+    url       = "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1368131",
+}
+
+@online{lobe, 
+    author = "Microsoft",
+    title= "Machine Learning Made Easy", 
+    url={https://lobe.ai/}, 
+    journal={Lobe},
+    urldate={2021-04-02}
+}
+
+
+@InProceedings{ModelValidation,
+author="Sokolova, Marina
+and Japkowicz, Nathalie
+and Szpakowicz, Stan",
+editor="Sattar, Abdul
+and Kang, Byeong-ho",
+title="Beyond Accuracy, F-Score and ROC: A Family of Discriminant Measures for Performance Evaluation",
+booktitle="AI 2006: Advances in Artificial Intelligence",
+year="2006",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="1015--1021",
+isbn="978-3-540-49788-2"
+}
+
+
+
+
+
+@article{Fama1970,
+ ISSN = {00221082, 15406261},
+ URL = {http://www.jstor.org/stable/2325486},
+ author = {Eugene F. Fama},
+ journal = {The Journal of Finance},
+ number = {2},
+ pages = {383--417},
+ publisher = {[American Finance Association, Wiley]},
+ title = {Efficient Capital Markets: A Review of Theory and Empirical Work},
+ volume = {25},
+ year = {1970}
+}
+
+@article{EMHhistory,
+  title={History of the Efficient Market Hypothesis},
+  author={Martin Sewell},
+  journal={University College London},
+  year={2011}
+}
+
+@article{dickey1979distribution,
+  title={Distribution of the estimators for autoregressive time series with a unit root},
+  author={Dickey, David A and Fuller, Wayne A},
+  journal={Journal of the American statistical association},
+  volume={74},
+  number={366a},
+  pages={427--431},
+  year={1979},
+  publisher={Taylor \& Francis}
+}
+
+
+@article{EMH,
+Author = {Malkiel, Burton G.},
+Title = {The Efficient Market Hypothesis and Its Critics      },
+Journal = {Journal of Economic Perspectives},
+Volume = {17},
+Number = {1},
+Year = {2003},
+Month = {3},
+Pages = {59-82},
+DOI = {10.1257/089533003321164958},
+URL = {https://www.aeaweb.org/articles?id=10.1257/089533003321164958}}
+
+
+
+@article{EMHforecast,
+title = {Efficient market hypothesis and forecasting},
+journal = {International Journal of Forecasting},
+volume = {20},
+number = {1},
+pages = {15-27},
+year = {2004},
+issn = {0169-2070},
+doi = {https://doi.org/10.1016/S0169-2070(03)00012-8},
+url = {https://www.sciencedirect.com/science/article/pii/S0169207003000128},
+author = {Allan Timmermann and Clive W.J. Granger},
+keywords = {Efficient market hypothesis, Forecast evaluation, Model specification, Learning},
+abstract = {The efficient market hypothesis gives rise to forecasting tests that mirror those adopted when testing the optimality of a forecast in the context of a given information set. However, there are also important differences arising from the fact that market efficiency tests rely on establishing profitable trading opportunities in ‘real time’. Forecasters constantly search for predictable patterns and affect prices when they attempt to exploit trading opportunities. Stable forecasting patterns are therefore unlikely to persist for long periods of time and will self-destruct when discovered by a large number of investors. This gives rise to non-stationarities in the time series of financial returns and complicates both formal tests of market efficiency and the search for successful forecasting approaches.}
+}
+
+@article{hannan1979determination,
+  title={The determination of the order of an autoregression},
+  author={Hannan, Edward J and Quinn, Barry G},
+  journal={Journal of the Royal Statistical Society: Series B (Methodological)},
+  volume={41},
+  number={2},
+  pages={190--195},
+  year={1979},
+  publisher={Wiley Online Library}
+}
+
+@article{rather2015recurrent,
+  title={Recurrent neural network and a hybrid model for prediction of stock returns},
+  author={Rather, Akhter Mohiuddin and Agarwal, Arun and Sastry, VN},
+  journal={Expert Systems with Applications},
+  volume={42},
+  number={6},
+  pages={3234--3241},
+  year={2015},
+  publisher={Elsevier}
+}
+
+@inproceedings{li2010applications,
+  title={Applications of artificial neural networks in financial economics: a survey},
+  author={Li, Yuhong and Ma, Weihua},
+  booktitle={2010 International symposium on computational intelligence and design},
+  volume={1},
+  pages={211--214},
+  year={2010},
+  organization={IEEE}
+}
+
+@article{hansson2017stock,
+  title={On stock return prediction with LSTM networks},
+  author={Hansson, Magnus},
+  year={2017}
+}
+
+@article{taqqu1995estimators,
+  title={Estimators for long-range dependence: an empirical study},
+  author={Taqqu, Murad S and Teverovsky, Vadim and Willinger, Walter},
+  journal={Fractals},
+  volume={3},
+  number={04},
+  pages={785--798},
+  year={1995},
+  publisher={World Scientific}
+}
+
+@article{basu1977investment,
+  title={Investment performance of common stocks in relation to their price-earnings ratios: A test of the efficient market hypothesis},
+  author={Basu, Sanjoy},
+  journal={The journal of Finance},
+  volume={32},
+  number={3},
+  pages={663--682},
+  year={1977},
+  publisher={Wiley Online Library}
+}
+
+@article{ball1978anomalies,
+  title={Anomalies in relationships between securities' yields and yield-surrogates},
+  author={Ball, Ray},
+  journal={Journal of financial economics},
+  volume={6},
+  number={2-3},
+  pages={103--126},
+  year={1978},
+  publisher={Elsevier}
+}
+
+
+@misc{siaminamini2018forecasting,
+      title={Forecasting Economics and Financial Time Series: ARIMA vs. LSTM}, 
+      author={Sima Siami-Namini and Akbar Siami Namin},
+      year={2018},
+      eprint={1803.06386},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+
+@article{10.1371/journal.pone.0155133,
+    doi = {10.1371/journal.pone.0155133},
+    author = {Qiu, Mingyue AND Song, Yu},
+    journal = {PLOS ONE},
+    publisher = {Public Library of Science},
+    title = {Predicting the Direction of Stock Market Index Movement Using an Optimized Artificial Neural Network Model},
+    year = {2016},
+    month = {05},
+    volume = {11},
+    url = {https://doi.org/10.1371/journal.pone.0155133},
+    pages = {1-11},
+    number = {5}
+}
+
+@article{jeong2019recurrent,
+  title={Recurrent neural network-adapted nonlinear ARMA-GARCH model with application to S\&P 500 index data},
+  author={Jeong, Yongjin and Lee, Sangyeol},
+  journal={Journal of the Korean Data and Information Science Society},
+  volume={30},
+  number={5},
+  pages={1187--1195},
+  year={2019}
+}
+
+@article{sang2019improving,
+  title={Improving trading technical analysis with tensorflow long short-term memory (LSTM) neural network},
+  author={Sang, Chenjie and Di Pierro, Massimo},
+  journal={The Journal of Finance and Data Science},
+  volume={5},
+  number={1},
+  pages={1--11},
+  year={2019},
+  publisher={Elsevier}
+}
+
+@article{long2019deep,
+  title={Deep learning-based feature engineering for stock price movement prediction},
+  author={Long, Wen and Lu, Zhichen and Cui, Lingxiao},
+  journal={Knowledge-Based Systems},
+  volume={164},
+  pages={163--173},
+  year={2019},
+  publisher={Elsevier}
+}
+
+@article{box1970distribution,
+  title={Distribution of residual autocorrelations in autoregressive-integrated moving average time series models},
+  author={Box, George EP and Pierce, David A},
+  journal={Journal of the American statistical Association},
+  volume={65},
+  number={332},
+  pages={1509--1526},
+  year={1970},
+  publisher={Taylor \& Francis Group}
+}
+
+@inproceedings{tao2018advanced,
+  title={Advanced LSTM: A study about better time dependency modeling in emotion recognition},
+  author={Tao, Fei and Liu, Gang},
+  booktitle={2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages={2906--2910},
+  year={2018},
+  organization={IEEE}
+}
+
+@article{paliwal2009neural,
+  title={Neural networks and statistical techniques: A review of applications},
+  author={Paliwal, Mukta and Kumar, Usha A},
+  journal={Expert systems with applications},
+  volume={36},
+  number={1},
+  pages={2--17},
+  year={2009},
+  publisher={Elsevier}
+}
+
+
+
+@online{DE_Shaw,
+    author="{D. E. Shaw Group}",
+    title="What We Do",
+    url="https://www.deshaw.com/what-we-do",
+    urldate={2021-04-30}
+}
+
+
+@book{tsay,
+  title={Analysis of Financial Time Series},
+  author={Tsay, Ruey S},
+  year={2010},
+  publisher={Wiley},
+  edition={3},
+  isbn={978-0-470-41435-4},
+}
+
+
+@article{logreturn,
+  title={Modelling and Forecasting Financial
+Log-returns as Locally Stationary
+Wavelet Processes},
+  author={Piotr Fryzlewicz},
+  journal={Journal of Applied Statistics},
+  volume={32},
+  number={5},
+  pages={503-–528},
+  year={2005},
+}
+
+
+
+@InProceedings{garch,
+author="Hossain, Altaf
+and Zaman, Faisal
+and Nasser, M.
+and Islam, M. Mufakhkharul",
+editor="Chaudhury, Santanu
+and Mitra, Sushmita
+and Murthy, C. A.
+and Sastry, P. S.
+and Pal, Sankar K.",
+title="Comparison of GARCH, Neural Network and Support Vector Machine in Financial Time Series Prediction",
+booktitle="Pattern Recognition and Machine Intelligence",
+year="2009",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="597--602",
+abstract="This article applied GARCH model instead AR or ARMA model to compare with the standard BP and SVM in forecasting of the four international including two Asian stock markets indices.These models were evaluated on five performance metrics or criteria. Our experimental results showed the superiority of SVM and GARCH models, compared to the standard BP in forecasting of the four international stock markets indices.",
+isbn="978-3-642-11164-8"
+}
+
