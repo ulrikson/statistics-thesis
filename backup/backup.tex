@@ -119,7 +119,7 @@ Erik \& Erik
 \newpage
 \thispagestyle{empty}
 \section*{Sammanfattning}
-I denna studie jämförs en LSTM-modell (Long Short-Term Memory) med en ARMA-GARCH-modell på ett svenskt småbolagsindex. Modellerna korsvalideras över 1000 skattningar. Resultatet visar att ARMA-GARCH i genomsnitt är mer exakt och genererar högre avkastning än LSTM. Mäts prestation i prediktionsfel är modellerna dock oskiljbara. Studien visar även att ARMA-GARCH (men inte LSTM) kan användas för att skapa en algoritmisk handelsstrategi som ger högre avkastning än indexet.
+I denna studie jämförs en ekonometrisk modell (ARMA-GARCH) med en djupinlärningsmodell (LSTM) på ett svenskt småbolagsindex. Det finns en brist på studier som jämför djupinlärningsmodeller med GARCH-modeller, framförallt på svenska börsindex, vilket denna uppsats söker att bidra med. Studien ämnar dels att besvara om djupinlärningsmodellen med fördel kan användas istället för den ekonometriska modellen samt dels om en algoritmisk handelsstrategi som ger högre avkastning än det berörda indexet kan skapas. Modellerna korsvalideras över 1.000 skattningar och utvärderas med MAPE, RMSE, precision, känslighet, F-värde och avkastning från simulerad handel. Resultatet visar att ARMA-GARCH i genomsnitt är mer exakt och genererar högre avkastning än LSTM. Mäts prestation i prediktionsfel är modellerna dock oskiljbara. Studien visar även att ARMA-GARCH (men inte LSTM) kan användas för att skapa en algoritmisk handelsstrategi som ger högre avkastning än indexet.
 
 %I denna studie appliceras en LSTM (long short-term memory) på prisdata från OMX small-cap index som jämförs med den konventionella tidsseriemodellen ARIMA(1,1)-GARCH(1,1). Det visar sig att LSTM överträffar en ARMA(1,1) med GARCH(1,1) komponent på en periods sikt medan ARMA(1,1)-GARCH(1,1) ger mer exakta skattningar på 5, 21 och 63 dagars sikt. Vid simulerad handling över 1.000 perioder är ARMA(1,1)-GARCH(1,1) att föredra oavsett antal tidsperioder fram i tiden. Studien antyder att en ARMA(1,1)-GARCH(1,1) med fördel kan användas för att applicera en algoritmisk handelsstrategi som överpresterar index under den studerade perioden. 
 
@@ -160,15 +160,12 @@ I denna studie jämförs en LSTM-modell (Long Short-Term Memory) med en ARMA-GAR
 
 \begin{itemize}
     \item Abstract / Sammanfattning
-    \item Title 
-    \item är det tydligt att t i tabellerna syftar till antal perioder framåt?
-    \item vi ändrade ju kring precison, käsnlighet \& F-värde. var uppmärksam på om gamla resonemang mot förmodan ligger kvar
-    \item tänk extra på att vi inte ska få det att låta som att vi testat LSTM mot ALLA ekonometriska modeller
+    \item titel 
+    \item "denna studie" eller "denna uppsats"?
     \item Kolla igenom F2, tips från Uffe
     
     % Språkligt
     \item tempus (introduktion + teori = nutid, metod = nutid, resultat = nutid,  diskussion + slutsats = dåtid
-    \item Bort: Man, vi, vår, prediktera, så, jag
     \item horungar
 \end{itemize}
 
@@ -181,20 +178,20 @@ I denna studie jämförs en LSTM-modell (Long Short-Term Memory) med en ARMA-GAR
 \section{Inledning}
 Efter att New York Stock Exchange började tillåta handel med programvara på 1980-talet populariserades algoritmisk handel.  Idag sker en stor del av all handeln på finansmarknaden automatiskt med algoritmer, år 2012 utgjorde exempelvis algoritmisk handel 85 procent av marknadsvolymen på den amerikanska börsen \parencite[][,s.258]{glantz2013multi}. Denna utveckling har i stort sin grund i den breda utecklingen av avancerad programvara och ökade möjligheter att samla in och lagra stora mängder data. Detta är en uveckling som småsparare såväl som större aktörerna såsom investmentbanker och hedgefonder dragit nytta av \parencite{DE_Shaw}. Det har publicerats ett stort antal akademiska studier som visar på att algoritmer som använder artificiella neurala nätverk, så kallade djupinlärningsmodeller, istället för ekonometriska modeller (såsom ARIMA, GARCH mfl.) med fördel kan implementeras för att generera högre avkastning än index \parencite{paliwal2009neural}. En vanligt förekommande djupinlärningsmodell är LSTM (Long Short-Term Memory) som är en typ av neuralt nätverk med egenskapen att lära sig långsiktiga mönster i data, varför den ofta används just för tidsserieanalys inom kvantitativ finans.
 
-Trots att det existerar ett brett segment av empirisk forskning på hur djupinlärningsmodeller med fördel kan användas finns det få studier som behandlar effekten av att implementera en sådan modell på ett svenskt index, vilket denna studie vill bidra med. Syftet med denna studie är således att undersöka om djupinlärningsalgoritmer med fördel kan användas istället för ekonometriska modeller på svenska börsindex. I denna studie besvaras följande frågor:
+Trots att mycket empirisk forskning gjorts på hur djupinlärningsmodeller med fördel kan användas finns det få studier som behandlar effekten av att implementera dessa på ett svenskt index, vilket denna studie vill bidra med. Syftet med denna studie är således att undersöka om en djupinlärningsmodell med fördel kan användas istället för en ekonometrisk modell på ett svenskt börsindex. I denna studie besvaras följande frågor:
 
 \begin{itemize}
-    \item Kan en djupinlärningsmodell med fördel användas som substitut för en traditionell ekonometrisk modell på svenskt börsindex?
-    \item Kan en algoritmisk handelsstrategi som ger högre avkastning utvecklingen hos ett svenskt småbolagsindex skapas?
+    \item Kan en djupinlärningsmodell med fördel användas som substitut för en  ekonometrisk modell på svenskt börsindex?
+    \item Kan en algoritmisk handelsstrategi som ger högre avkastning på ett svenskt småbolagsindex skapas?
 \end{itemize}
 
-Detta kommer utföras genom att jämföra LSTM med en ARIMA-modell med en GARCH-komponent, så kallad ARMA-GARCH. 
+Detta kommer utföras genom att jämföra LSTM med en ARIMA-modell med en GARCH-komponent, så kallad ARMA-GARCH. Notera att en \textit{ARIMA-modell som inte behöver differentieras kallas ARMA. }
 
-Denna studie är strukturerad på följande vis: I avsnitt 1.1 presenteras tidigare studier, i 1.2 avgränsningar, i avsnitt 2. presenteras finansiell teori, i avsnitt 3. presenteras teorin kring modellerna, i avsnitt 4. metod och datamaterial, avsnitt 5. presenteras resultatet, avsnitt 6. diskussionen och avsnitt 7. studiens slutsats.
+Denna studie är strukturerad på följande vis: I avsnitt 1.1 presenteras tidigare studier, i 1.2 avgränsningar, i avsnitt 2. presenteras finansiell teori, i avsnitt 3. presenteras metoden, i avsnitt 4. datamaterialet, i avsnitt 5. presenteras resultatet, i avsnitt 6. diskussionen och i avsnitt 7. studiens slutsats.
 
 %%%%%%%%%%%%%% AVGRÄNSNINGAR %%%%%%%%%%%%%%%
-\subsection{Avgränsningar}
-Uppsatsen är begränsad till att enbart beröra småbolagsindex på Stockholmsbörsen och slutsatserna av analysen av vilken metod som är bäst går således inte nödvändigtvis att applicera på andra finansiella marknadsindex. Resultatet går inte heller nödvändigtvis att generalisera utanför de valda prediktionsperioderna.
+%\subsection{Avgränsningar}
+Uppsatsen är begränsad till småbolagsindex på Stockholmsbörsen och slutsatserna av analysen av vilken metod som är bäst går således inte nödvändigtvis att applicera på andra finansiella marknadsindex. Resultatet går inte heller nödvändigtvis att generalisera utanför de valda prediktionsperioderna.
 
 
 %%%%%%%%%%%%%% TIDIGARE STUDIER %%%%%%%%%%%%%%%
@@ -202,19 +199,11 @@ Uppsatsen är begränsad till att enbart beröra småbolagsindex på Stockholmsb
 
 \subsection{Relaterad forskning}
 
-En av de mest omfattande studierna kring användandet av neurala nätverk i jämförelse med ekonometriska modeller genomfördes av Paliwal och Kumar \parencite*{paliwal2009neural}. I en metaanalys summerar de resultat från 96 studier inom olika områden och finner att neurala nätverk presterar lika bra och i många fall bättre än ekonometriska modeller. Det påpekas å andra sidan att en anledning till detta resultat kan bero på ouppfyllda antaganden kring de ekonometriska modellerna. 
+En av de mest omfattande studierna kring användandet av neurala nätverk i jämförelse med ekonometriska modeller genomfördes av Paliwal och Kumar \parencite*{paliwal2009neural}. I en metaanalys summerar de resultat från 96 studier inom olika områden, såsom finans, medicin och marknadsföring. De finner att neurala nätverk presterar lika bra och i många fall bättre än ekonometriska modeller. Det påpekas å andra sidan att en anledning till detta resultat kan bero på ouppfyllda antaganden kring de ekonometriska modellerna. 
 
-I en annan studie som genomfördes av Namin \& Namin \parencite*{siaminamini2018forecasting} undersöker de hur väl LSTM och ARIMA predicerar ett flertal världsindex genom att jämföra spridningen av avvikelser i prediktionerna, och finner bevis för att LSTM överträffar ARIMA vad gäller förmågan att reducera prediktionsfel sett till storleken på RMSE. Qiu \& Song \parencite*{10.1371/journal.pone.0155133} finner likt Namin \& Namin \parencite*{siaminamini2018forecasting} att ett Artificellt Neuralt Nätverk (ANN) med fördel kan användas för att predicera framtida avkastning. Bollerslev (1986) utvecklade GARCH som är en generaliserad variant av ARCH-modellen som presenterats bara några år innan av Engle (1982). Gemensamt för de flesta studier som jämför ekonometriska modeller med djupinlärningsmodeller är att de jämför ARIMA med LSTM, trots att GARCH-modeller visat sig framgångsrika på finansiella tidsserier \parencite{garch}.
+I en annan studie av Namin \& Namin \parencite*{siaminamini2018forecasting} undersöker de hur väl LSTM och ARIMA predicerar ett flertal världsindex genom att jämföra spridningen av avvikelser i prediktionerna, och finner bevis för att LSTM överträffar ARIMA vad gäller förmågan att reducera prediktionsfel sett till storleken på RMSE. Qiu \& Song \parencite*{10.1371/journal.pone.0155133} finner likt Namin \& Namin \parencite*{siaminamini2018forecasting} att ett Artificellt Neuralt Nätverk (ANN) med fördel kan användas för att predicera framtida avkastning. Bollerslev (1986) utvecklade GARCH som är en generaliserad variant av ARCH-modellen som presenterats bara några år innan av Engle (1982). Gemensamt för de flesta studier som jämför ekonometriska modeller med djupinlärningsmodeller är att de jämför ARIMA med LSTM, trots att GARCH-modeller visat sig framgångsrika på finansiella tidsserier \parencite{garch}.
 
-I denna studie appliceras ARMA-GARCH på ett svenskt småbolagsindex med kortare prediktionsperioder och andra empiriska valideringsmetoder. Det finns ett flertal studier som berör storbolagsindex för ett enskilt land eller ett världsindex. Empiriska studier som jämför artificella nätverk gentemot en hybrid mellan ARIMA och GARCH på svenska börsindex, synnerligen småbolagsindex, är mer sällsynt vilket denna studie vill bidra med. 
-
-%I en annan intressant studie som utfördes Jeong \& Lee \parencite*{jeong2019recurrent} applicerades en tangentfunkton i ARMA-komponenten och utifrån denna metod fann de bevis för att en modifierad icke-linjär ARMA-GARCH modell med liknande egenskaper som Recurrent Neural Network (RNN), predicerar framtida avkastning på S\&P500 mer precist än en ARMA-GARCH med linjära egenskaper. Detta är i linje med Long, Lu och Ciu \parencite*{long2019deep} och ges ytterliggare stöd av Sang \& Di Pierro \parencite*{sang2019improving} där de i en studie applicerar LSTM och visar på att utförandet av en trading-strategi baserat på ANN med fördel kan användas vid prediktion av finansiella tidsserier. 
-
-
-
-
-
- 
+I denna studie appliceras ARMA-GARCH på ett svenskt småbolagsindex med andra prediktionsperioder och empiriska valideringsmetoder. Det finns ett flertal studier som berör storbolagsindex för ett enskilt land eller ett världsindex. Empiriska studier som jämför artificella nätverk gentemot en hybrid mellan ARIMA och GARCH på svenska börsindex, synnerligen småbolagsindex, är mer sällsynt vilket denna studie vill bidra med. 
 
 \newpage
 %%%%%%%%%%%%%% FINANSIELL TEORI %%%%%%%%%%%%%%%
@@ -231,14 +220,14 @@ På lång sikt menar förespråkare av EMH att majoriteten av investerare kommer
 
 \subsection{Logaritmerad avkastning}
 
-En avkastningserie besitter statistiska egenskaper som gör den mer lätthanterlig att arbeta med än en prisserie, varför denna typ av serie ofta används i finansiella studier. Låt $P_{t}$ vara priset på en tillgång vid tidpunkt $t$, bruttoavkastningen av en investering från tidpunkt $t$ till tidpunkt $t-1$ kan då defineras som
+En avkastningserie besitter statistiska egenskaper som gör den mer lätthanterlig att arbeta med än en prisserie, varför denna typ av serie ofta används i finansiella studier. Låt $P_{t}$ vara priset på en tillgång vid tidpunkt $t$. Bruttoavkastningen av en investering från tidpunkt $t$ till tidpunkt $t-1$ kan då defineras som
 
 \begin{equation}
     1+R_{t} = \frac{P_{t}}{P_{t-1}}
 \end{equation}
 
 
-Kontinuerligt sammansatt avkastning, eller logaritmerad avkastning, har additiva egenskaper som innebär att avkastning kan adderas över tid.  Vid logaritmering reduceras även variationen och blir mer konstant över tid \parencite{tsay}. Låt $r_{t}$ definera den logaritmerade avkastningen vid tidpunkt $t$. Den logaritmerade avkastningen för period $t$ kan då formellt defineras som
+Kontinuerligt sammansatt avkastning, mer känt som logaritmerad avkastning, har fördelen att dne har additiva egenskaper som innebär att avkastning kan adderas över tid.  Vid logaritmering reduceras även variationen och blir mer konstant över tid \parencite{tsay}. Låt $r_{t}$ definera den logaritmerade avkastningen vid tidpunkt $t$. Den logaritmerade avkastningen för period $t$ kan då formellt defineras som
 
 \begin{equation}
     r_{t} = ln(1+R_{t}) = ln \Big( \frac{P_{t}}{P_{t-1}} \Big)
@@ -305,7 +294,7 @@ I både AIC och BIC indikerar lägre värden mer optimal modell.
 \subsection{ARMA-GARCH}
 För att hantera heteroskedasticitet i tidsserier utvecklades ARCH och GARCH av Engle \parencite*{engle1982autoregressive} respektive Bollerslev \parencite*{bollerslev1986generalized}. Genom att kombinera ARMA och GARCH till en hybridmodel, ARMA-GARCH, går det att fånga systematiska skillnader i medelvärdet av tidsserien över tid med ARMA-komponenten såväl som systematiska skillnader i varians med GARCH-komponenten. Modellen är relativt ny inom men har blivit populär inom flera olika områden \parencite{chen2011short}. 
 
-Modellen beståndsdelar presenteras formellt nedan enligt ekvation 3.6 och 3.6, där \(e_t\) är felterm, \(\delta\) en konstant, \(\phi_i\) vikter för laggade beroende variabel i AR(p), \(\theta_i\) vikter för laggade feltermen i MA(q), \(z_t\) är oberoende och identiskt fördelad med väntevärde 0 och varians 1, w en konstant, \(\alpha_i\) vikt för ARCH-termen och \(\beta_i\) vikt för GARCH-termen \parencite[][,s.507 ff.]{bollerslev1986generalized, montgomery2015forecasting}.
+Modellens beståndsdelar presenteras formellt nedan enligt ekvation 3.6 och 3.7, där \(e_t\) är felterm, \(\delta\) en konstant, \(\phi_i\) vikter för laggade beroende variabel i AR(p), \(\theta_i\) vikter för laggade feltermen i MA(q), \(z_t\) är oberoende och identiskt fördelad med väntevärde 0 och varians 1, w en konstant, \(\alpha_i\) vikt för ARCH-termen och \(\beta_i\) vikt för GARCH-termen \parencite[][,s.507 ff.]{bollerslev1986generalized, montgomery2015forecasting}.
 
 \begin{equation}
     y_t = \delta + \sum_{i=1}^{p}\phi_iy_{t-i}  +e_t - \sum_{i=1}^{q}\theta_i e_{t-i} 
@@ -316,11 +305,11 @@ Modellen beståndsdelar presenteras formellt nedan enligt ekvation 3.6 och 3.6, 
 
 Förenklat uttryckt modellerar alltså ARMA den beroende variabeln i ekvation 3.6 och GARCH feltermern i ekvation 3.7. 
 
-Vid specificeringen av ARMA-GARCH modellen testas först att modellens antagnaden är uppfyllda. Med Augmented Dickey-Fuller-test avgörs om tidsserien är stationär. Här används en funktion  i R (\textit{ur.df}) som optimalt väljer antal tidslaggar baserat på AIC innan testet utförs.  För att bekräfta att det specifierade antalet laggar genererar en modell med oberoende residualer görs därefter ett Ljung-Box-test med nollhypotesen att residualerna är oberoende och alternativhypotesen att de inte är oberoende \parencite{box1970distribution}. En annan förutsättning är att feltermerna av en ARIMA är heteroskedastiska, därför görs det tidigare nämnda Lagrange Multiplier-testet på bästa möjliga ARIMA-modell. Givet att det inte finns belägg för homoskedasticitet väljs sedan bästa möjliga ARMA-GARCH-modell utifrån AIC och BIC. 
+Vid specificeringen av ARMA-GARCH modellen testas först att modellens antagnaden är uppfyllda. Med Augmented Dickey-Fuller-test avgörs om tidsserien är stationär. Här används en funktion  i R (\textit{ur.df}) som optimalt väljer antal tidslaggar baserat på AIC innan testet utförs.  För att bekräfta att det specifierade antalet laggar genererar en modell med oberoende residualer görs därefter ett Ljung-Box-test med nollhypotesen att residualerna är oberoende och alternativhypotesen att de inte är oberoende \parencite{box1970distribution}. En annan förutsättning är att feltermerna av en ARIMA är heteroskedastiska, därför görs det tidigare nämnda Lagrange Multiplier-testet på bästa möjliga ARIMA-modell. Om belägg för homoskedasticitet finns behövs inte GARCH-komponenten. Givet att det inte finns belägg för homoskedasticitet, tidsserien är stationär och residualerna är oberoende väljs sedan bästa möjliga ARMA-GARCH-modell utifrån AIC och BIC. 
 
 
 \subsection{Long Short-Term Memory (LSTM)}
-LSTM är en typ av upprepat neuralt nätverk (RNN: Recurrent Neural Network), vilket i sin tur är en sorts artificiellt neuralt nätverk (ANN). En väsentlig fördel med att använda artificiella neurala nätverk framför mer traditionella statistiska metoder är att de automatiskt kan approximera icke-linjära funktioner som är komplexa att hantera statistiskt \parencite{paliwal2009neural}. Således kan LSTM tänkas identifiera mönster som ARMA-GARCH inte har förmågan att identifiera.  För att förstå LSTM behövs en grundläggande förståelse för artificiella neurala nätverk. 
+LSTM är en typ av rekurrent neuralt nätverk (RNN: Recurrent Neural Network), vilket i sin tur är en sorts artificiellt neuralt nätverk (ANN). En väsentlig fördel med att använda artificiella neurala nätverk framför mer traditionella statistiska metoder är att de automatiskt kan approximera icke-linjära funktioner som är komplexa att hantera statistiskt \parencite{paliwal2009neural}. Således kan LSTM tänkas identifiera mönster som ARMA-GARCH inte har förmågan att identifiera.  För att förstå LSTM behövs en grundläggande förståelse för artificiella neurala nätverk. 
 
 Ett artificiellt neuralt nätverk är en struktur av sammankopplade neuroner inspirerad av biologiska neurala nätverk. Nätverket består av flertalet olika algoritmer som tillsammans utför beräkningar. RNN är artificiella neurala nätverk som är särskilt bra på att hantera temporär data. Till skillnad från vanliga artificiella nätverk har varje neurons celler ett 'minne', där all indata behandlas i loopar. På detta sätt kan de 'komma ihåg' tidigare data. Dock inte särskilt länge, vilket är varför LSTM behövs \parencite[][,s.478-559]{purkait2019hands}. 
 
@@ -331,11 +320,9 @@ LSTM-nätverk kan behålla information i ett långsiktigt minne (en: \textit{sta
 \centering
 \end{figure}
 
-Varje LSTM-cell har tre indata; det långsiktiga minnet från tidigare steg \(c_{t-1}\), indatan från tidigare steg \(h_{t-1}\) och den nya indatan \(x_{t}\).
+Varje LSTM-cell har tre indata; det långsiktiga minnet från tidigare steg \(c_{t-1}\), indatan från tidigare steg \(h_{t-1}\) och den nya indatan \(x_{t}\). De mörkgrå fyrkanterna utmärker de gates (svenska: 'grindar') som finns i LSTM. 
 
-Först kommer \textit{forget gate}, det är den som gör att LSTM skiljer sig från RNN. Detta eftersom forget gate bestämmer huruvida indatan från tidigare steg (\(h_{t-1}\)) ska behållas eller förkastas från det långsiktiga minnet. Beslutet görs baserat på värdet i förra tidsperioden och den nya indatan, genom att ge olika vikter mellan 0 och 1 (där 1 är högst vikt). \textit{Input gate} kontrollerar flödet av information i det befintliga cellminnet. Denna grind bestämmer vilken ny information som ska läggas till i det långsiktiga minnet. I den sista grinden, \textit{output gate}, avgörs vad som ska läggas till i det 'dolda' långsiktiga minnet (en: hidden state) (\(h_{t}\)) inför nästa tidsperiod.
-
-Varje neurons cell tar alltså emot tre indata och skickar vidare två utdata till nästa cell. Detta itereras sedan över alla datapunkter och efter den sista iterationen omvandlas det dolda långsiktiga minnet till utdata i önskat format \parencite[][,s.478-559]{purkait2019hands}.
+Först kommer \textit{forget gate}, det är den som gör att LSTM skiljer sig från RNN. Detta eftersom forget gate bestämmer huruvida indatan från tidigare steg (\(h_{t-1}\)) ska behållas eller förkastas från det långsiktiga minnet. Beslutet görs baserat på värdet i förra tidsperioden och den nya indatan, genom att ge olika vikter mellan 0 och 1 (där 1 är högst vikt). \textit{Input gate} kontrollerar flödet av information i det befintliga cellminnet. Denna grind bestämmer vilken ny information som ska läggas till i det långsiktiga minnet. I den sista grinden, \textit{output gate}, avgörs vad som ska läggas till i det 'dolda' långsiktiga minnet (en: hidden state) (\(h_{t}\)) inför nästa tidsperiod. I slutet av tidsserien omvandlas sedan det dolda långsiktiga minnet till utdata i önskat format \parencite[][,s.478-559]{purkait2019hands}.
 
 Väldigt förenklat kan det alltså förklaras som  att för varje tidpunkt i datan skickas datan in i LSTM-cellerna, itereras i dessa där det avgörs vad som ska tas med i beräkningarna av nästa datapunkt $(t+1)$, itereras sedan över alla datapunkter och till slut görs prediktioner baserat på modellen. 
 
@@ -348,15 +335,11 @@ Definiera \(x_t\) som indatavektorn, \(f_t\) som forget gates aktiveringsvektor,
 \begin{equation}c_t= f_t \circ c_{t-1} + i_t \circ \tilde{c}_t\end{equation}
 \begin{equation}h_t= o_t \circ tanh(c_t)\end{equation}
 
-LSTM har inga formella antaganden och därav finns inga formella test att tillgå. Modellen utformas efter ett implicit antagande att det långsiktiga minnet från en period beror på det långsiktigta minnet från perioden innan. Det vill säga att det långsiktiga minnet kan överföras mellan tidsperioderna. Det behövs inte heller någon särskild distribution eftersom det neurala nätverket lär sig träningsdatans empiriska distribution \parencite[][,s.478-559]{purkait2019hands}.
+LSTM har inga formella antaganden och därför finns inga formella test att tillgå. Modellen utformas efter ett implicit antagande att det långsiktiga minnet från en period beror på det långsiktiga minnet från perioden innan. Det vill säga att det långsiktiga minnet kan överföras mellan tidsperioderna. Det behövs inte heller något antagande om distribution eftersom det neurala nätverket lär sig träningsdatans empiriska distribution \parencite[][,s.478-559]{purkait2019hands}.
 
 För att skatta en LSTM behöver modellen så kallade hyperparametrar. Dessa hyperparametrar är olika för olika modeller och alla behöver inte specifieras. Ämnet är relativt outforskat, nedan följer de parametrar där det finns studier på hur de bör specifieras. Övriga parametrar väljs utifrån vad som är vanligt förekommande. Antal laggar väljs till lika många som i ARMA-GARCH för jämförbarhetens skull.
 
-Hyperparametrarna med gedigen forskning bakom sig är \textit{förlustfunktion, optimeringsalgoritm} och antal \textit{epoker}.
-
-Förlustfunktionen ger ett mått på hur väl modellen presterar på träningsdatan. Den används som ett mått på modellens fel och detta ska minimeras. MSE (Mean Square Error) rekommenderas för de flesta 'regressionsliknande' modeller, och därför även i detta fall \parencite[][,s.178 ff.]{purkait2019hands}. \par
-Optimeringsalgoritm är den typ av algoritm som används för att minimera det ovan beskrivna felet. 'Adam' är en optimeringsalgoritm som visat sig fungera bra för stora dataset och rekommenderas av Purkait \parencite*[][,s.178 ff.]{purkait2019hands}. \par
-Epoker indikerar antal gånger modellen kommer att itererar genom hela datasetet. Tidigare studier har kommit fram till att valet inte har någon relevant betydelse för hur väl modellen presterar \parencite{siaminamini2018forecasting}. Då Purkait använder fem epoker för LSTM, använder även denna uppsats fem \parencite[][,s.178 ff.]{purkait2019hands}. \par
+Hyperparametrarna med forskning bakom sig är \textit{förlustfunktion, optimeringsalgoritm} och antal \textit{epoker}. Förlustfunktionen ger ett mått på hur väl modellen presterar på träningsdatan. Den används som ett mått på modellens fel och detta ska minimeras. MSE (Mean Square Error) rekommenderas för de flesta 'regressionsliknande' modeller, och därför även i detta fall \parencite[][,s.178 ff.]{purkait2019hands}. Optimeringsalgoritm är den typ av algoritm som används för att minimera det ovan beskrivna felet. 'Adam' är en optimeringsalgoritm som visat sig fungera bra för stora dataset och rekommenderas av Purkait \parencite*[][,s.178 ff.]{purkait2019hands}. Epoker indikerar antal gånger modellen kommer att itererar genom hela datasetet. Tidigare studier har kommit fram till att valet inte har någon relevant betydelse för hur väl modellen presterar \parencite{siaminamini2018forecasting}. Då Purkait använder fem epoker för LSTM, använder även denna uppsats fem \parencite[][,s.178 ff.]{purkait2019hands}.
 
 
 \subsection{Validering}
@@ -429,7 +412,7 @@ Där $F1=1$ är det högsta värdet som indikerar optimal precision och känslig
 
 
 \subsubsection{Korsvalidering}
-Tidsserien korsvalideras med en k-delad korsvalidering som innebär att träning- och testdata flyttas en period framåt från dess ursprungliga startpunkt i $n$ perioder, en procedur som visualiseras nedan i Figur 3.3. Vid nästa period inkluderas alltså det första värdet som predicerades mot i nya träningsdatan \parencite{bergmeir2018note}. I denna studie utförs korsvalideringen över 1.000 perioder. 
+Tidsserien korsvalideras med en k-delad korsvalidering som innebär att träning- och testdata flyttas en period framåt från dess ursprungliga startpunkt i $n$ perioder, en procedur som visualiseras i Figur 3.3. Vid nästa period inkluderas alltså det första värdet som predicerades mot i nya träningsdatan \parencite{bergmeir2018note}. I denna studie utförs korsvalideringen över 1.000 perioder. 
 
 \begin{figure}[H]
 \caption{Illustration av k-delad korsvalidering med fyra perioder.}
@@ -438,7 +421,7 @@ Tidsserien korsvalideras med en k-delad korsvalidering som innebär att träning
 \end{figure}
 
 
-Fördelen med denna typ av korsvalidering är att prediktioner görs vid 1.000 olika punkter istället för att utgå från en enstaka punkt. Att 1.000 perioder görs möjliggör även medelvärdesanalys av valideringsmåtten och en statistisk jämförelse mellan dem. För att jämföra måttens medelvärden används z-test då antalet observationer, $n=1.000$, ses som tillräckligt.
+Fördelen med korsvalidering är att prediktioner görs vid 1.000 olika punkter istället för att utgå från en enstaka punkt. Detta möjliggör även medelvärdesanalys av valideringsmåtten. För att jämföra måttens medelvärden används z-test då antalet observationer, $n=1.000$, ses som tillräckligt.
 
 Låt $a$ motsvara ARMA-GARCH och $b$ LSTM, $i$ vara det valideringsmått som testas och $t$ antal perioder som prediceras framåt i tiden. Då är $\Bar{a}_{i,t}$ ARMA-GARCHs medelvärde för valideringsmått $i$ vid $t$ perioders prediktion, $s_{a,i,t}^2$ variansen och $n_a$ antal observationer. På samma sätt är  $\Bar{b}_{i,t}$ LSTMs medelvärde för valideringsmått $i$ vid $t$ perioders prediktion, $s_{b,i,t}^2$ variansen och $n_b$ antal observationer. Notera dock att $n_a = n_b$. Hypoteserna är som följer. Valet av alternativhypotes beror på om det testas om ARMA-GARCH är högre än LSTM (ekvation 3.21) eller tvärtom (ekvation 3.22) för ett givet valideringsmått vid en given prediktionsperiod. 
 
@@ -461,20 +444,20 @@ Som sedan jämförs med det kritiska värdet 1,64 för ett ensidigt test på 5 p
 
 
 \subsubsection{Handelsstrategi}
-För att undersöka hur väl modellerna presterar när de appliceras för att handla med simuleras en handelsstrategi över samma 1.000 perioder som i korsvalideringen. I simuleringen är en enhet av index utdistribuerat att handla med. Handeln utförs baserat på prediktioner på 1, 3, 5, 21 och 63 dagars sikt. Vid varje dag under de 1000 dagarna görs alltså prediktioner 1, 3, 5, 21 och 63 dagar fram i tiden och baserat på vad prediktionen är tas ett beslut. Följande strategier används:
+För att undersöka hur väl modellerna presterar när de appliceras för att handla med simuleras en handelsstrategi över samma 1.000 perioder som i korsvalideringen. I simuleringen är en enhet av index utdistribuerat att handla med. Vid varje dag under de 1000 dagarna görs prediktioner $t$ dagar fram i tiden och baserat på vad prediktionen är tas ett beslut. Följande strategier används:
 
 \begin{itemize}
-    \item Lång strategi: Strategin baseras på att automatiskt öppna en lång position (lägga en köporder) när modellen predicerar att prisnivån $t$ dagar fram kommer att vara högre än vid tidpunkten då prediktionen görs ($t=0$). Med andra ord görs ett köp om $P_t > P_0$.
-    \item Kort strategi: Gå kort (lägga en säljorder) när modellen predicerar att prisnivån $t$ dagar fram kommer att vara lägre än tidpunkten då prediktionen görs ($t=0$). Med andra ord görs ett sälj om $P_t < P_0$.
-    \item Behållstrategi: Behålla (varken köpa eller sälja) om det predicerade priset är identiskt med priset då prediktionen görs, dvs. $P_t = P_0$, eller om den föreslagna ordern är identisk med ordern innan. Det senare eftersom det bara går att äga en enhet av indexet åt gången. Exempelvis blir två köpindikationer på rad således ett köp och ett behåll.
+    \item Lång strategi: Strategin baseras på att automatiskt öppna en lång position (lägga en köporder) när modellen predicerar att prisnivån $t$ dagar fram kommer att vara högre än vid tidpunkten då prediktionen görs ($t=0$). Med andra ord görs ett köp om $\hat{P_t} > P_0$.
+    \item Kort strategi: Gå kort (lägga en säljorder) när modellen predicerar att prisnivån $t$ dagar fram kommer att vara lägre än tidpunkten då prediktionen görs ($t=0$). Med andra ord görs ett sälj om $\hat{P_t} < P_0$.
+    \item Behållstrategi: Behålla (varken köpa eller sälja) om det predicerade priset är identiskt med priset då prediktionen görs, dvs. $\hat{P_t} = P_0$, eller om den föreslagna ordern är identisk med ordern innan. Det senare eftersom det bara går att äga en enhet av indexet åt gången. Exempelvis blir två köpindikationer på rad således ett köp och ett behåll.
 \end{itemize}
 
-Modellerna jämförs i sin tur med en passiv strategi - att öppna en lång position i index och behålla den utan ytterliggare handlingar. Om LSTM och ARMA-GARCH lyckas spekulera rätt kring uppgångar och nedgångar om den framtida prisnivån kommer de i snitt generera högre avkastning än den passiva strategin under den givna tidsperioden.
+Modellerna jämförs i sin tur med en passiv strategi - att öppna en lång position i index och behålla den utan ytterliggare handlingar. Om LSTM och ARMA-GARCH lyckas spekulera rätt kring upp- och nedgångar om den framtida prisnivån kommer de i snitt generera högre avkastning än den passiva strategin under den givna tidsperioden.
 
 \newpage
 \section{Datamaterial}
 
-Data på dagliga stängningspriser för småbolagsindexet OMX Stockholm Small Cap (OMXSSC) hämtas från Refinitiv Eikon som är ett finansiellt system och används av över 40 000 institutioner världen över \parencite{Eikon}. Datan omfattar perioden 1 januari 2003 (när indexet skapades) till 12 februari 2021. I OMXSSC inkluderas data från totalt 93 svenska småbolag, vilka defineras som bolag med ett börsvärde som understiger 150 miljoner euro \parencite{smabalagsdefinition}. Bilaga B specificerar alla bolag som ingår OMXSSC. I \emph{Figur 4.1} samt \textit{Tabell 4.1} ges en överblick av stängningspriserna under perioden. 
+Data på dagliga stängningspriser för småbolagsindexet OMX Stockholm Small Cap (OMXSSC) hämtas från Refinitiv Eikon, ett finansiellt system som används av över 40 000 institutioner världen över \parencite{Eikon}. Datan omfattar perioden 1 januari 2003 (när indexet skapades) till 12 februari 2021. I OMXSSC inkluderas data från totalt 93 svenska småbolag, vilka defineras som bolag med ett börsvärde som understiger 150 miljoner euro \parencite{smabalagsdefinition}. Bilaga B specificerar alla bolag som ingår OMXSSC. I \emph{Figur 4.1} samt \textit{Tabell 4.1} ges en överblick av stängningspriserna under perioden. 
 
 \begin{figure}[H]
 \caption{Tidsserie över stängningspriser för OMXSSC}
@@ -513,29 +496,21 @@ OMXSSC & -0,0875 & 0,0056     & 0,0701 & 0,0006 & -1,4438  & 12,9149  \\ \cmidru
 \end{tabular}
 \end{table}
 
-
-
-Eftersom logaritmerade priser kan ses som svårtolkade transformeras dessa om till prisnivå efter att modellen gjort sina skattningar. Den kumulativa summan av den logaritmerade avkastningen under period $t$ exponentieras enligt
+Eftersom logaritmerade priser är svårtolkade transformeras dessa om till prisnivå efter att modellen gjort sina skattningar. Den kumulativa summan av den logaritmerade avkastningen under period $t$ exponentieras för att få prisnivån enligt:
 
 \begin{equation}
     \text{Prisnivå} =  exp\Big({\sum\limits_{t=1}^n \hat{\theta_{t}}} + ln(\phi)\Big)
 \end{equation}
 
-Där  $\hat{\theta_t}$ är predicerad logaritmerad avkastning för tidpunkt $t$ och $\phi$ är träningsperiodens sista datapunkt. 
+Där  $\hat{\theta_t}$ är predicerad logaritmerad avkastning för tidpunkt $t$ och $\phi$ är träningsperiodens sista prisdatapunkt. 
 
-
-%forecasted_price = exp(cumsum(forecast) + log(last_train))
-
-% Denna känns lite mis placé 
-%Skevhetskoefficienten för avkastningsserien är negativ - fördelningen har en lång negativ svans med större frekvens av negativa avkastningar jämfört med positiva avkastningar. Kurtosiskoefficienten är större än tre och kännetecknas av en tjock svans (En: "\emph{fat tail}") där dagar med onormalt hög avkastning förekommer mer frekvent än hos en normalfördelning.
-
-Prediktioner görs t=\{1, 3, 5, 21, 63\} dagar fram i tiden, där $t=1$ motsvarar en börsdag,  $t=3$ en halv börsvecka, $t=5$ en hel börsvecka, $t=21$ en börsmånad och $t=63$ motsvarar ett börskvartal. Vidare delas 75 procent av datamaterialet in i träningsdata som sträcker sig från 1 januari 2003 till 31 juli 2016. Resterande del av datamaterialet utgörs av testdata som sträcker sig mellan den 3 augusti 2016 till den 14 febuari 2021. 
+Prediktioner görs $t=\{1, 3, 5, 21, 63\}$ dagar fram i tiden, där $t=1$ motsvarar en börsdag,  $t=3$ en halv börsvecka, $t=5$ en hel börsvecka, $t=21$ en börsmånad och $t=63$ ett börskvartal. Vidare delas 75 procent av datamaterialet in i träningsdata som sträcker sig från 1 januari 2003 till 31 juli 2016. Resterande del av datamaterialet utgörs av testdata som sträcker sig mellan den 3 augusti 2016 till den 14 febuari 2021. 
 
 \newpage
 %%%%%%%%%%%%%% RESULTAT %%%%%%%%%%%%%%%
 \section{Resultat}
 \subsection{ARMA-GARCH modellvalidering}
-Först och främst testas om tiddserien är stationär med hjälp av Augmented Dickey-Fuller-test (ADF-test). Det är signifikant med $p<0,01$, optimalt antal laggar var 1 (se bilaga C). Nollhypotesen att tidsserien inte är stationär förkastas alltså. Således behövs ingen differentiering i ARIMA, dvs. en ARIMA(p,0,q)=ARMA(p,q) är tillräcklig. För att validera om feltermen behöver modelleras med GARCH eller om det räcker med en ARIMA-modell väljs först den optimala ARIMA-modellen utifrån vår data baserat på AIC med hjälp av funktionen \textit{auto.arima} i R. Detta ger en ARIMA(1,0,1) som sammanställs i Tabell 5.1. För att säkerställa oberoende i feltermerna för modellen gjordes ett Ljung-Box-test. Detta visar att residualerna i ARIMA-modellen inte är beroende (se bilaga D). Slutligen testas efter heteroskedasticitet i ARIMA-modellen med LM-test. Nollhypotesen förkastas, $p=0.00$, och alltså visas tydliga tecken på heteroskedasticitet (se bilaga E). Detta indikerar att feltermen egentligen bör modelleras med GARCH. 
+Först testas om tiddserien är stationär med Augmented Dickey-Fuller-test (ADF-test). Det är signifikant med $p<0,01$ och optimalt antal laggar är 1 (se bilaga C). Nollhypotesen att tidsserien inte är stationär förkastas alltså. Således behövs ingen differentiering i ARIMA, dvs. en ARIMA(p,0,q)=ARMA(p,q) är tillräcklig. För att validera om feltermen behöver modelleras med GARCH eller om det räcker med en ARIMA väljs den optimala ARIMA-modellen utifrån datan med funktionen \textit{auto.arima} i R. Valet görs baserat på AIC. Detta ger en ARIMA(1,0,1) som sammanställs i Tabell 5.1. För att säkerställa oberoende i feltermerna görs ett Ljung-Box-test. Det visar att residualerna i ARIMA-modellen inte är beroende (se bilaga D). Slutligen testas efter heteroskedasticitet i ARIMA-modellen med LM-test. Nollhypotesen förkastas, $p=0.00$, och alltså finns tydliga tecken på heteroskedasticitet (se bilaga E). Detta indikerar att feltermen egentligen bör modelleras med GARCH. 
 
 \begin{table}[H]
 \caption{Sammanfattning av ARIMA(1,0,1)}
@@ -563,8 +538,7 @@ BIC                   & -22.683,36 \\
 \footnotesize{Notera att samtliga parametrar är signifikant skilda från 0 på 5 procent nivå.}
 \end{table}
 
-
-Eftersom det finns tydliga tecken på heteroskedasticitet och ingen differentiering behövs appliceras ARMA-GARCH. AIC och BIC visar att ARMA(1,1)-GARCH(1,1) är den bästa möjliga modellen utifrån datan (se bilaga G för alla modeller som utvärderas). Nedan följer en sammanställning över denna och i bilaga F finns prediktioner baserat på modellen, inklusive konfidentsintervall, illustrerade. Samtliga parametrar är signifikant skilda från 0 på 5 procent signifikansnivå.
+Eftersom det finns tecken på heteroskedasticitet och ingen differentiering behövs appliceras ARMA-GARCH. AIC och BIC visar att ARMA(1,1)-GARCH(1,1) är den bästa möjliga modellen (se bilaga G för alla modeller som utvärderas). Nedan följer en sammanställning över denna och i bilaga F illustreras prediktioner baserat på modellen, inklusive konfidentsintervall.
 
 \begin{table}[H]
 \caption{Sammanfattning av ARMA(1,1)-GARCH(1,1)}
@@ -639,7 +613,7 @@ $t ^\dagger$  & \emph{RMSE} & \emph{MAPE(\%)} & \emph{RMSE} & \emph{MAPE(\%)} \\
 
 Utifrån tabellen syns att LSTM har lägre prediktionsfel än ARMA-GARCH på 3- och 5 dagars sikt medan ARMA-GARCH överträffar LSTM på 1-, 21- och 63 dagars sikt.
 
-RMSE och MAPE korsvalidera även över 1.000 perioder. Medelvärden av måtten presenteras nedan. 
+RMSE och MAPE korsvalideras även över 1.000 perioder. Medelvärden av måtten presenteras nedan. 
 
 
 
@@ -736,7 +710,7 @@ $t^\dagger$  & \emph{LSTM} & \emph{ARMA-GARCH} & \emph{LSTM} & \emph{ARMA-GARCH}
 \footnotesize{$^\dagger$ Antal börsdagar som prediceras}
 \end{table}
 
-ARMA-GARCH är i snitt statistiskt signifikant bättre gällande samtliga mått oavsett hur långa prediktioner som görs. Att värdena på precision och känslighet är identiska vid en periods prediktion beror på att testen testar samma sak då. Antingen är det en sann stigande och då ger bägge måtten 1 eller är det inte sant stigande och då returnerar båda måtten 0 (se ekvation 3.16 och 3.17).
+ARMA-GARCH är i snitt bättre gällande samtliga mått oavsett hur långa prediktioner som görs. Att värdena på precision och känslighet är identiska vid en periods prediktion beror på att testen testar samma sak då. Antingen är det en sann stigande och då ger bägge måtten 1 eller är det inte sant stigande och då returnerar båda måtten 0 (se ekvation 3.16 och 3.17).
 
 
 \subsection{Utvärdering av handelsstrategi}
@@ -770,35 +744,29 @@ $t^\dagger$  & \emph{Avkastning(\%)} & \emph{Antal ordrar} & \emph{Avkastning(\%
 \end{table}
 
 
-Ur tabellen går det att utröna att LSTM presterar sämre än den passiva strategin oavsett vilken tidsperiod prediktionerna baseras på. ARMA-GARCH presterar bättre än den passiva strategin på en till 21 perioders sikt och sämre därefter. Utifrån dessa resultat tyder det på att ARMA-GARCH överträffar LSTM vid implementation av ovan nämnda handelsstrategier. 
+Ur tabellen går det att utröna att LSTM presterar sämre än den passiva strategin oavsett vilken tidsperiod prediktionerna baseras på. ARMA-GARCH presterar bättre än den passiva strategin på en till 21 perioders sikt och sämre därefter. 
 
 \newpage
 \section{Diskussion}
-Denna studie ämnade att undersöka om djupinlärningsmodeller med fördel kan användas istället för traditionella ekonometriska modeller på svenskt börsindex. Därutöver undersöktes om en handelsstrategi som är bättre än indexet kan byggas baserat på någon av modellerna. För att besvara dessa användes de tre olika valideringstyperna
+Denna studie ämnade att undersöka om en djupinlärningsmodell med fördel kan användas istället för en ekonometrisk modell på svenskt börsindex. Därutöver undersöktes om en algoritmisk handelsstrategi som är bättre än indexet kan byggas. För att besvara dessa användes de tre olika valideringstyperna:
 
 \begin{itemize}
-    
 \item Prediktionsfel (MAPE och RMSE)
-
 \item Binär klassificering (F-värde, precision och känslighet)
-
-\item Simulerad handel 
+\item Simulerad handel (procentuell avkastning)
 \end{itemize}
 
-Resultatet utvärderades först vid en enskild period. De resultaten gjorde det dock svårt att avgöra om skillnaderna var permanenta eller enbart en konsekvens av den punkt på tidsserien där prediktionerna gjordes, vilket var varför korsvalidering över 1.000 perioder gjordes. Det är resultaten av korsvalideringen som diskuteras nedan.
+Resultatet utvärderades först vid en enskild skattning. De resultaten gjorde det dock svårt att avgöra om skillnaderna var permanenta eller enbart en konsekvens av den punkt på tidsserien där prediktionerna gjordes, vilket var varför korsvalidering över 1.000 skattningar gjordes. Det är resultaten av korsvalideringen som diskuteras nedan. 
 
-Rörande prediktionsfel, mätt med RMSE och MAPE, visade analysen att ingen av modellerna var signifikant bättre än den andra oavsett hur många perioder fram i tiden som predicerades.
+Rörande prediktionsfel, mätt med RMSE och MAPE, visade analysen att ingen av modellerna var signifikant bättre än den andra oavsett hur många perioder fram i tiden som predicerades. Föga förvånande var kortare prediktioner mer precisa än långa. 
 
+Den binära klassificeringen av pris upp- och nedgångar utgjordes av känslighet, precision och F-värde. Oavsett vilket av måtten som används eller hur långa prediktioner som görs presterar ARMA-GARCH i genomsnitt bättre. Väl värt att notera är att LSTM inte är bättre än att slumpmässigt gissa (50 procent rätt) avseende precision eller känslighet. På 1, 3 och 5 dagars sikt är inte ARMA-GARCH heller det, men på 21 och 63 perioders sikt ger ARMA-GARCH mer än 50 procent rätt på både precision och känslighet. Detta visar på att även om genomsnittliga felet är stort (RMSE och MAPE) på längre perioder så är modellen åtminstone bra på att identifiera huruvida priset kommer att gå upp. Intressant är också att samtliga modeller blir bättre vid längre prediktioner, vilket är rakt motsatt resultatet av prediktionsfel. Detta kan tänkas bero på att marknaden under längre perioder konsekvent stiger, vilket inte gäller i samma utsträckning på kort sikt (se Figur 4.1), det räcker alltså för modellerna att identifiera en stigande trend för att ha rätt.   
 
-
-Den binära klassificeringen av prisupp- och nedgångar utgjordes av känslighet, precision och F-värde. Oavsett vilket av måtten som används eller hur långa prediktioner som görs presterar ARMA-GARCH i genomsnitt bättre. Väl värt att notera är att LSTM inte är bättre än att slumpmässigt gissa (50 procent rätt) avseende precision eller känslighet. På 1, 3 och 5 dagars sikt är inte ARMA-GARCH heller det, men på 21 och 63 perioders sikt ger ARMA-GARCH mer än 50 procent rätt på både precision och känslighet. Detta visar på att även om genomsnittliga felet är stort (RMSE och MAPE) på längre perioder så är modellen åtminstone bra på att identifiera huruvida priset kommer att ha gå upp. 
-
-Resultaten från den sista valideringstypen, simulerad handling över 1.000 perioder, visade entydigt i att ARMA-GARCH var att föredra oavsett hur långt in i framtiden det förutspås. Det var även tydligt, och föga förvånande, att kortsiktiga prediktioner var mer lönsamma än långsiktiga. ARMA-GARCH var även bättre än den passiva strategin upp till 21 perioders prediktion medan LSTM var sämre oavsett prediktionsperiod. Som tidigare diskuterades kan den passiva strategin liknas vid en slumpvandring, och givet att EMH rådde ska det därför inte ha gått att finna en modell som var bättre än den denna. Men eftersom ARMA-GARCH visade sig generera högre avkastning än den passiva strategin kan EMH alltså förkastas under den studerade perioden. En ARMA-GARCH kan alltså användas för att applicera en algoritmisk handelsstrategi som utpresterar index under den valda perioden. 
+Resultaten av simulerad handling över 1.000 perioder visade entydigt att ARMA-GARCH var att föredra oavsett hur långt in i framtiden det prediceras. Det var även tydligt, och föga förvånande, att kortsiktiga prediktioner gav högre avkastning än långsiktiga. ARMA-GARCH var även bättre än den passiva strategin upp till 21 perioders prediktion medan LSTM var sämre oavsett prediktionsperiod. Som tidigare diskuterats kan den passiva strategin liknas vid en slumpvandring och givet att EMH rådde ska det därför inte ha gått att finna en modell som var bättre än den denna. Men eftersom ARMA-GARCH visade sig generera högre avkastning än den passiva strategin kan EMH alltså förkastas under den studerade perioden. En ARMA-GARCH kan användas för att applicera en algoritmisk handelsstrategi som presterar bättre än index under den studerade perioden.
 
 Intressant är att modellerna var oskiljbara rörande prediktionsfel men skillnaden i avkastning var stor. Ur ett bredare perspektiv kan dessa resultat tänkas påvisa att en modell som presterar väl på modellvalideringen inte nödvändigtvis är samma modell som genererar högst avkastning. Det belyser vikten av att inte enbart basera modellval på lägsta möjliga prediktionsfel. 
 
 Tabell 6.1 illustrerar samtliga slutsatser som nås i diskussionen ovan.
-
 
 \begin{table}[H]
 \caption{Sammanfattning av jämförelsen mellan modellerna}
@@ -823,24 +791,24 @@ $t ^\dagger$  & Prediktionsfel & Exakthet & Avkastning \\
 \footnotesize{$^\dagger$ Antal börsdagar som prediceras}
 \end{table}
 
-När resultatet sätts i förhållande till tidigare studier nås flera intressanta insikter. Flera tidigare studier nådde samstämmigt slutsatsen att LSTM var åtminstone lika bra och ofta bättre än ARIMA. Att denna studie visat andra resultat kan tänkas bero på tre olika faktorer. För det första har ett flertal tidigare studier applicerat ARIMA utan GARCH-komponent för att jämföra LSTM med. Som diskuterades tidigare och som påvisades i denna studie, är antagandet om homoskedasticitet sällan uppfyllt inom finansiell analys. Att använda en ARIMA-modell utan GARCH-komponent är således suboptimalt. En andra faktor som kan ha påverkat var specifikationen av LSTM-modellen. Denna studie valde att låta modellen använda en lagg, eftersom det var jämförbart med vad som var bästa möjliga ARMA-GARCH. Hade fler laggar valts kan det i teorin ha gett ett bättre resultat. Dock ökar risken för en överanpassning av data markant -  modellen anpassas för nära till den befintliga datan vilket i sin tur hämmar dess möjlighet att förutspå utanför det befintliga urvalet. I denna uppsats valdes en specifikation baserat på teori snarare än empiri, vilket med fördel kan minska risken för överanpassning men kan å andra sidan ha gjort resultaten mindre fördelaktiga för LSTM-modellen. Den tredje faktorn är att det i denna studie har säkerställts att samtliga ARMA-GARCHs antaganden är uppfyllda. Detta har visat sig inte alltid vara fallet i andra studier \parencite{paliwal2009neural}. 
+När resultatet sätts i förhållande till tidigare studier nås flera intressanta insikter. Flera av dessa nådde slutsatsen att LSTM var åtminstone lika bra och ofta bättre än ARIMA. Att denna studie visat andra resultat kan tänkas bero på tre faktorer. För det första har flera tidigare studier applicerat ARIMA utan GARCH-komponent. Som diskuterades och även påvisades i denna studie är antagandet om homoskedasticitet sällan uppfyllt i finansiella tidsserier. Att använda en ARIMA-modell utan GARCH-komponent är således suboptimalt. En andra faktor som kan ha påverkat var specifikationen av LSTM. Modellen använde en lagg eftersom det var jämförbart med ARMA-GARCH. Fler laggar hade i teorin kunnat ge ett annat resultat. Dock ökar risken för en överanpassning av data markant -  modellen anpassas för nära till den befintliga datan vilket hämmar förmågan att förutspå utanför urvalet. I denna uppsats valdes alltså antalet laggar baserat på teori snarare än empiri, vilket minskat risken för överanpassning men kan ha gjort förutsättningar för LSTM mindre fördelaktiga. Den tredje faktorn är att det i denna studie har säkerställts att ARMA-GARCHs antaganden är uppfyllda. Som Paliwal och Kumar \parencite*{paliwal2009neural} visat har det i tidigare jämförelser mellan statistiska modeller och neurala nätverk ofta slarvats med antaganden. 
 
-Ses modellerna ur ett användarvänlighetsperspektiv är ARMA-GARCH att föredra då LSTM är svårtolkad och som påpekades i metoden finns det inte särskilt gedigen forskning bakom hur modellerna ska specifieras. LSTM är icke-parametrisk och det går således inte heller att dra slutsatser kring specifika variablers signifikans. En fördel med LSTM är dock att den bara har ett antagande att uppfylla, vilket gör den enkel att applicera. 
+Ses modellerna ur ett användarvänlighetsperspektiv är ARMA-GARCH att föredra. LSTM är svårtolkad och som påpekades i metoden finns det begränsat med forskning kring hur modellerna ska specifieras. LSTM är icke-parametrisk och det går således inte heller att dra slutsatser kring signifikansnivåer. En fördel med LSTM är dock att den bara har ett antagande att uppfylla, vilket gör den enkel att applicera. 
 
 \subsection{Felkällor}
-Enligt Hyndman och Athanasopoulos \parencite*[][,s.452 f.]{hyndman2018forecasting} finns flera potentiella felkällor till alla tidsseriemodeller . Den slumpmässiga feltermen, benämnd \(e_t\), är såklart en av dem. Denna uppsats, och de flesta andra på området, försöker aktivt motverka denna. Det finns dock åtminstone tre ytterligare felkällor som är svårare att aktivt motverka. 
+Enligt Hyndman och Athanasopoulos \parencite*[][,s.452 f.]{hyndman2018forecasting} finns flera potentiella felkällor till alla tidsseriemodeller . Den slumpmässiga feltermen, benämnd \(e_t\), är såklart en av dem. Utöver den finns åtminstone tre ytterligare felkällor. 
 
-Den första är estimaten av parametrar i modellerna i såväl ARMA-GARCH som LSTM. En viss osäkerhet kommer såklart från att modellerna är baserade på ett stickprov, parametrarna är optimala utifrån stickprovet och inte nödvändigtvis optimala utifrån populationen. Utöver det har denna uppsats valt ARMA-GARCH-modell baserat på AIC och BIC, men andra liknande mått för utvärdering finns som hade kunnat ge annorlunda resultat. Hannan-Quinn Information Criterion (HQC) är ett sådant \parencite{hannan1979determination}. På samma vis hade LSTM-modellen kunnat specifieras annorlunda, med viss försiktighet rörande överanpassning hade denna studie kunnat optimera de använda parametrarna till detta dataset och fått andra estimat. 
+Den första är estimaten av parametrar i modellerna i såväl ARMA-GARCH som LSTM. En viss osäkerhet kommer från att modellerna är baserade på ett stickprov, parametrarna är optimala utifrån stickprovet och inte nödvändigtvis utifrån populationen. Utöver det har denna studie valt ARMA-GARCH-modell baserat på AIC och BIC, men andra liknande mått för utvärdering finns som hade kunnat ge annorlunda resultat. Hannan-Quinn Information Criterion (HQC) är ett sådant \parencite{hannan1979determination}. På samma vis hade LSTM-modellen kunnat specifieras annorlunda, med viss försiktighet rörande överanpassning hade de använda parametrarna kunnat optimerats mer till datasetet och gett andra estimat.
 
-Den andra är valet av modell. Alla modeller kommer alltid att vara en förenkling av verkligheten, vilket i sig leder till fel, men olika modeller kan ge mer eller mindre fel. Exempelvis finns det andra typer av GARCH-modeller att tillgå, däribland exponentiell GARCH (EGARCH) som används inom finansiell analys \parencite{nelson1991conditional}. ARMA-komponenten hade också kunnat bytas ut mot ARFIMA (Autoregressive Fractionally Integrated Moving Average), som visat sig effektiva när tidsserier behöver ha ett långt minne, precis som LSTM \parencite{taqqu1995estimators}. Angående LSTM hade det varit möjligt att använda en mer simpel modell. Neurala nätverk, som LSTM är en underkategori till, används frekvent inom området \parencite[se t.ex.][]{rather2015recurrent, li2010applications}. Det finns även andra typer av LSTM, såsom 'Deep LSTM' med flera lager av neuroner \parencite[se applikation i][]{hansson2017stock}. Vidare baserades valet av modell i samtliga perioder av korsvalideringen på vilken modell som var bäst vid sista träningsperioden. Andra resultat hade möjligen kunnat nås om modellen vid varje enskild tidpunkt modellerades om och parametrarna optimerades utifrån den nya datapunkten som tillförts. Det är inte heller säkert, även om det är troligt, att alla modellantaganden uppfylls i alla av de 1.000 perioderna vilket kan påverkat hur väl ARMA-GARCH presterat. 
+Den andra är valet av modell. En modell kommer alltid att vara en förenkling av verkligheten, vilket i sig leder till fel, men olika modeller kan ge mer eller mindre fel. Exempelvis används andra typer av GARCH-modeller inom finansiell analys, såsom exponentiell GARCH (EGARCH) \parencite{nelson1991conditional}. Vidare hade ARMA-komponenten hade kunnat bytas ut mot ARFIMA (Autoregressive Fractionally Integrated Moving Average), som visat sig effektiva när tidsserier behöver ha ett långt minne, precis som LSTM \parencite{taqqu1995estimators}. Angående LSTM hade det varit möjligt att använda en simplare modell. Neurala nätverk, som LSTM är en underkategori till, används frekvent inom området \parencite[se t.ex.][]{rather2015recurrent, li2010applications}. Det finns även andra typer av LSTM, såsom 'Deep LSTM' med flera lager av neuroner \parencite[se applikation i][]{hansson2017stock}. Därutöver baserades valet av modell i samtliga perioder av korsvalideringen på vilken modell som var bäst vid sista träningsperioden. Andra resultat hade möjligen kunnat nås om modellen vid varje enskild tidpunkt modellerades om och parametrarna optimerades utifrån den nya datapunkten som tillförts. Det är inte heller säkert, även om det är troligt, att alla modellantaganden uppfylls i alla av de 1.000 perioderna vilket kan påverkat ARMA-GARCH prestation. 
 
-Slutligen gäller inte nödvändigtvis förutsättningarna som var när datan insamlades in i framtiden. Ett extremt exempel på denna felkälla är Bitcoin. I maj 2016 var en Bitcoin värd ungefär 450 USD, fem år senare, när denna uppsats skriv i maj 2021, är en Bitcoin värd ungefär 64.000 USD. En ökning med över 14.000 procent \parencite{yahoo_bitcoin}. Det förefaller osannolikt att en modell som var bra innan ökningen fortfarande håller måttet. Poängen är alltså att framtida applikationer av de modeller som använts i denna studie inte nödvändigtvis genererar samma resultat.
+Slutligen gäller inte nödvändigtvis förutsättningarna som var när datan insamlades in i framtiden. Ett exempel på denna felkälla är Bitcoin. I maj 2016 var en Bitcoin värd ca. 450 USD. När denna uppsats skriv i maj 2021 är en Bitcoin värd ca. 64.000 USD. En ökning med över 14.000 procent \parencite{yahoo_bitcoin}. Det förefaller osannolikt att en modell som var bra innan ökningen fortfarande håller måttet. Poängen är alltså att framtida applikationer av de modeller som använts i denna studie inte nödvändigtvis genererar samma resultat.
 
 \newpage
 %%%%%%%%%%%%%%%%%%
 % SLUTSATS %%%%%%%%%%%%%%%%%%%
 \section{Slutsats}
-Denna studie ämnade att besvara frågorna 'Kan en djupinlärningsmodell med fördel användas som substitut för en traditionell ekonometrisk modell på svenskt börsindex?' samt 'Kan en algoritmisk handelsstrategi som ger högre avkastning utvecklingen hos ett svenskt småbolagsindex skapas?'. Resultatet visade att om minimering av prediktionsfel är målet är modellerna lika kapabla. Om målet snarare är exakthet är ARMA-GARCH att föredra, likaså om målet är generera högsta möjliga avkastning. ARMA-GARCH kan även användas för att bygga en handelsstrategi som är bättre än ett svenskt småbolagsindex utveckling.
+Denna studie ämnade att besvara frågorna 'Kan en djupinlärningsmodell med fördel användas som substitut för en ekonometrisk modell på svenskt börsindex?' samt 'Kan en algoritmisk handelsstrategi som ger högre avkastning än utvecklingen hos ett svenskt småbolagsindex skapas?'. Resultatet till den första frågan visade att om minimering av prediktionsfel är målet är modellerna lika kapabla. Om målet snarare är exakthet är ARMA-GARCH att föredra, likaså om målet är generera högsta möjliga avkastning. ARMA-GARCH kan även användas för att bygga en handelsstrategi som är bättre än ett svenskt småbolagsindex utveckling.
 
 Vidare studier kan med fördel undersöka om resultaten håller för andra index än OMXSSC. Detta vore intressant eftersom slutsatserna av denna uppsats delvis går emot tidigare forskning. Som diskuterades i felkällor kan framtida studier även djupdyka i olika varianter av ARMA-GARCH (såsom ARFIMA-EGARCH) respektive LSTM (såsom Deep LSTM).
 
@@ -849,7 +817,9 @@ Vidare studier kan med fördel undersöka om resultaten håller för andra index
 %%%%%%%%%%%%%%%%%%% Referenser %%%%%%%%%%%%%%%%%%%
 \newpage
 \section*{Referenser}
+\addcontentsline{toc}{section}{Referenser}
 \printbibliography[heading=none]
+
 
 
 
