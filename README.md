@@ -1,19 +1,10 @@
-https://kinsta.com/knowledgebase/what-is-github/  
-https://product.hubspot.com/blog/git-and-github-tutorial-for-beginners 
+# Forecasting the OMXSSC: A comparison between LSTM and ARMA-GARCH
+[Link to paper](https://su.diva-portal.org/smash/record.jsf?pid=diva2:1708050&dswid=5015)
 
-# How To
-1. cmd(ctrl)-shift-p och skriv 'Git: Clone'
-2. Kopiera repository URL (https://github.com/ulrikson/statistics-thesis): tryck på "Code" (grön knapp) och kopiera länken under HTTPS
-3. Klistra in i rutan i VS Code
-4. Välj vart du vill ha projektet lokalt. Jag har en mapp som heter "code" på skrivbordet tex
-5. Voila uppsatt!
+**Swedish Abstract**
 
-## Löpande uppdateringar
-När du sen öppnar projektet (mappen 'statistic-thesis') i VS Code kommer du se att det längst ner till vänster i VS Code står "master" och en "snurra"
-- Master är branchen vi jobbar i (egentligen inte så relevant)
-- Snurran kommer att visa om det finns uppdateringar att ladda ner / ladda upp (det senare när du gjort ändringar)
-- Pröva att ändra i t.ex. main.py, spara så kommer du se att det dyker upp en 1:a i sidomenyn till vänster, klicka den
-- main-py dyker nu upp under "changes". Här ligger alla ändringar du gjort men inte "publicerat" (= skickat till Github)
-- hovra changes så syns ett plus, tryck pluset så "stageas" dina ändringar (bara ett mellansteg man måste göra)
-- skriv sedan i meddelanderutan ovan vad du gjort (ex "testtesttest") och tryck cmd(ctrl)-enter. Dina ändringar är nu redo att skickas till GitHub, men ngn annan kan inte se det
-- Längst ner till vänster på skärmen (samma ställe som vi snackade om ovan) kmr du nu se en 1a med pil uppåt. Det betyder att du har någonting att skicka till molnet. Tryck på det. Efter några sekunder försvinner 1an och alla ändringar är skickade till GitHub och jag kan se dina ändringar.
+I denna studie jämförs en ekonometrisk modell, ARMA-GARCH, med en djupinlärningsmodell, LSTM, på det svenska småbolagsindexet OMXSSC. Det finns en brist på studier som jämför djupinlärningsmodeller med GARCH-modeller, framförallt på svenska småbolagsindex, vilket denna studie söker att bidra med. Studien ämnar dels att besvara om LSTM kan användas som substitut för ARMA-GARCH samt dels om en algoritmisk handelsstrategi som ger högre avkastning än det berörda indexet kan skapas. Modellerna korsvalideras över 1.000 tidpunkter och utvärderas med MAPE, RMSE, precision, känslighet, F-värde och avkastning från simulerad handel. Mäts prestation i prediktionsfel är modellerna oskiljbara. Resultatet visar dock att ARMA-GARCH i genomsnitt är mer exakt och genererar högre avkastning än LSTM. Denna studie antyder därför att ARMA-GARCH är att föredra framför LSTM. Studien antyder även att ARMA-GARCH, men inte LSTM, kan användas för att skapa en algoritmisk handelsstrategi som överpresterar utvecklingen av OMXSSC under den givna perioden.
+
+**English Abstract**
+
+In this study, an econometric model, ARMA-GARCH, is compared with a deep learning model, LSTM, on the Swedish small-cap index OMXSSC. There is a lack of studies comparing deep learning models with GARCH models, especially on Swedish small-cap indices, which this study seeks to contribute to. The study aims to answer whether LSTM can be used as a substitute for ARMA-GARCH, and whether an algorithmic trading strategy that yields higher returns than the relevant index can be created. The models are cross-validated over 1,000 time points and evaluated using MAPE, RMSE, precision, sensitivity, F-score, and returns from simulated trading. When measuring performance in terms of prediction error, the models are indistinguishable. However, the results show that ARMA-GARCH is on average more accurate and generates higher returns than LSTM. This study therefore suggests that ARMA-GARCH is preferable to LSTM. The study also suggests that ARMA-GARCH, but not LSTM, can be used to create an algorithmic trading strategy that outperforms the performance of OMXSSC during the given period.
